@@ -4,6 +4,7 @@ from datetime import datetime, timezone
 import jwt
 from bson import ObjectId
 from fastapi import Depends, FastAPI, HTTPException, status
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 
 from app.database import close_db, init_db, users_collection
@@ -26,6 +27,17 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(lifespan=lifespan)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 def _user_doc_to_response(user_doc: dict) -> UserResponse:
@@ -94,6 +106,11 @@ async def signup(user: UserCreate):
     result = await users_collection.insert_one(user_doc)
     user_doc["_id"] = result.inserted_id
     return _user_doc_to_response(user_doc)
+
+
+@app.get("/me", response_model=UserResponse)
+async def get_me(current_user: dict = Depends(get_current_user)):
+    return _user_doc_to_response(current_user)
 
 
 @app.post("/login", response_model=Token)
