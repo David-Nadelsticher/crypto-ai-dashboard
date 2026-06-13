@@ -1,22 +1,17 @@
 from contextlib import asynccontextmanager
-from datetime import datetime, timezone
 
-import jwt
-from bson import ObjectId
-from fastapi import Depends, FastAPI, HTTPException, status
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi.responses import JSONResponse
+from slowapi import _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
+from slowapi.middleware import SlowAPIMiddleware
+from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from app.database import close_db, init_db, users_collection
-from app.models.models import OnboardingUpdate, Token, UserCreate, UserPreferences, UserResponse
-from app.security import (
-    create_access_token,
-    decode_access_token,
-    hash_password,
-    verify_password,
-)
-
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
+from app.api.routes import auth, dashboard, users, votes
+from app.core.cors import apply_cors_headers, is_allowed_origin
+from app.core.limiter import limiter
+from app.db.database import close_db, init_db
 
 
 @asynccontextmanager
@@ -27,133 +22,53 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(lifespan=lifespan)
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
+app.add_middleware(SlowAPIMiddleware)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-        "http://127.0.0.1:5173",
-    ],
+    allow_origin_regex=r"https?://(localhost|127\.0\.0\.1)(:\d+)?",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 
-def _user_doc_to_response(user_doc: dict) -> UserResponse:
-    preferences = user_doc.get("preferences", {})
-    return UserResponse(
-        id=str(user_doc["_id"]),
-        name=user_doc["name"],
-        email=user_doc["email"],
-        onboarding_completed=user_doc.get("onboarding_completed", False),
-        preferences=UserPreferences(
-            assets=preferences.get("assets", []),
-            investor_type=preferences.get("investor_type"),
-            content_types=preferences.get("content_types", []),
-        ),
+@app.exception_handler(StarletteHTTPException)
+async def http_exception_handler(request: Request, exc: StarletteHTTPException):
+    headers = dict(exc.headers) if exc.headers else {}
+    response = JSONResponse(
+        status_code=exc.status_code,
+        content={"detail": exc.detail},
+        headers=headers,
     )
+    apply_cors_headers(response, request.headers.get("origin"))
+    return response
 
 
-async def get_current_user(token: str = Depends(oauth2_scheme)) -> dict:
-    credentials_exception = HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Could not validate credentials",
-        headers={"WWW-Authenticate": "Bearer"},
-    )
-    try:
-        payload = decode_access_token(token)
-        user_id = payload.get("sub")
-        if user_id is None:
-            raise credentials_exception
-        user = await users_collection.find_one({"_id": ObjectId(user_id)})
-        if user is None:
-            raise credentials_exception
-        return user
-    except (jwt.PyJWTError, ValueError):
-        raise credentials_exception
+@app.middleware("http")
+async def ensure_cors_headers(request: Request, call_next):
+    if request.method == "OPTIONS":
+        origin = request.headers.get("origin")
+        if is_allowed_origin(origin):
+            response = await call_next(request)
+            apply_cors_headers(response, origin)
+            response.headers.setdefault("Access-Control-Allow-Methods", "*")
+            response.headers.setdefault("Access-Control-Allow-Headers", "*")
+            return response
+
+    response = await call_next(request)
+    apply_cors_headers(response, request.headers.get("origin"))
+    return response
 
 
 @app.get("/")
-def read_root():
+async def read_root():
     return {"message": "Hello Moveo! The FastAPI server is running."}
 
 
-@app.post("/signup", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
-async def signup(user: UserCreate):
-    existing_user = await users_collection.find_one({"email": user.email.lower()})
-    if existing_user:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="A user with this email already exists",
-        )
-
-    now = datetime.now(timezone.utc)
-    user_doc = {
-        "name": user.name,
-        "email": user.email.lower(),
-        "password_hash": hash_password(user.password),
-        "onboarding_completed": False,
-        "preferences": {
-            "assets": [],
-            "investor_type": None,
-            "content_types": [],
-        },
-        "created_at": now,
-        "updated_at": now,
-    }
-
-    result = await users_collection.insert_one(user_doc)
-    user_doc["_id"] = result.inserted_id
-    return _user_doc_to_response(user_doc)
-
-
-@app.get("/me", response_model=UserResponse)
-async def get_me(current_user: dict = Depends(get_current_user)):
-    return _user_doc_to_response(current_user)
-
-
-@app.post("/login", response_model=Token)
-async def login(form_data: OAuth2PasswordRequestForm = Depends()):
-    user = await users_collection.find_one({"email": form_data.username.lower()})
-    if user is None or not verify_password(form_data.password, user["password_hash"]):
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect email or password",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-
-    access_token = create_access_token(data={"sub": str(user["_id"])})
-    return Token(access_token=access_token, token_type="bearer")
-
-
-@app.post("/onboarding", response_model=UserResponse)
-async def complete_onboarding(
-    onboarding: OnboardingUpdate,
-    current_user: dict = Depends(get_current_user),
-):
-    now = datetime.now(timezone.utc)
-    preferences = {
-        "assets": onboarding.assets,
-        "investor_type": onboarding.investor_type,
-        "content_types": onboarding.content_types,
-    }
-
-    await users_collection.update_one(
-        {"_id": current_user["_id"]},
-        {
-            "$set": {
-                "preferences": preferences,
-                "onboarding_completed": True,
-                "updated_at": now,
-            }
-        },
-    )
-
-    updated_user = await users_collection.find_one({"_id": current_user["_id"]})
-    if updated_user is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="User not found",
-        )
-    return _user_doc_to_response(updated_user)
+app.include_router(auth.router)
+app.include_router(users.router)
+app.include_router(dashboard.router)
+app.include_router(votes.router)
