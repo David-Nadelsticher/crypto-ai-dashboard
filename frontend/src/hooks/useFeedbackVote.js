@@ -40,7 +40,9 @@ export default function useFeedbackVote({ sectionName, itemReference, contentSna
       setMessage("Piggy will use this feedback in future briefs.");
       setMessageType("success");
     } catch (error) {
-      console.error(`Failed to submit vote for ${sectionName}:`, error);
+      if (import.meta.env.DEV) {
+        console.error(`Failed to submit vote for ${sectionName}:`, error);
+      }
       setSelectedVote(previousVote);
       setMessage("Could not save feedback. Try again.");
       setMessageType("error");

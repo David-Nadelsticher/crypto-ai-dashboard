@@ -1,5 +1,3 @@
-import { resolveFocusAssets } from "../config/cryptoAssets.js";
-
 export const EMPTY_INSIGHT_MESSAGE = "Piggy is still reviewing the market.";
 
 export function buildSourceLabel(insight) {
@@ -44,11 +42,6 @@ export function splitInsightParagraphs(text) {
   }
 
   return sentences;
-}
-
-export function formatFocusAssets(assets = []) {
-  const resolved = resolveFocusAssets(assets);
-  return resolved.length > 0 ? resolved.map((asset) => asset.ticker).join(" · ") : null;
 }
 
 export function formatPersonalizationContext(assets = [], contentTypes = []) {

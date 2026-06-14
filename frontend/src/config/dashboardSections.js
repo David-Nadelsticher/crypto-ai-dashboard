@@ -5,8 +5,6 @@ export const DASHBOARD_SECTIONS = [
   { id: "section-meme", label: "Market Break", iconKey: "meme" },
 ];
 
-export const SECTION_IDS = DASHBOARD_SECTIONS.map((section) => section.id);
-
 export const SECTION_BY_ID = Object.fromEntries(
   DASHBOARD_SECTIONS.map((section) => [section.id, section]),
 );

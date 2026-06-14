@@ -100,7 +100,9 @@ export default function useDashboardData() {
             return next;
           });
         } catch (reason) {
-          console.error(`${key} fetch failed:`, reason);
+          if (import.meta.env.DEV) {
+            console.error(`${key} fetch failed:`, reason);
+          }
           failureCount += 1;
           if (!isRefresh) {
             if (key === "prices") setPrices([]);
@@ -168,8 +170,6 @@ export default function useDashboardData() {
     isRefreshing,
     toast,
     dismissToast,
-    itemReferences,
-    itemReferenceReady,
     resolveItemReference,
   };
 }
