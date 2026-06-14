@@ -4,7 +4,7 @@ import { formatLastUpdated } from "../../utils/format";
 import PiggyAvatar from "../brand/PiggyAvatar";
 import Spinner from "../ui/Spinner";
 import Toast from "../ui/Toast";
-import { DashboardIcon } from "../icons/SectionIcons";
+import { DashboardIcon, SECTION_ICON_MAP } from "../icons/SectionIcons";
 import { DASHBOARD_SECTIONS } from "../../config/dashboardSections";
 
 const DEFAULT_NAV_ITEMS = DASHBOARD_SECTIONS;
@@ -49,7 +49,7 @@ function SidebarContent({
         </div>
 
         {sections.map((item) => {
-          const Icon = item.icon;
+          const Icon = SECTION_ICON_MAP[item.iconKey];
           const isActive = activeSection === item.id;
           return (
             <button

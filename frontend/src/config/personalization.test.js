@@ -4,7 +4,7 @@ import {
   getDefaultExpandedSections,
   getOrderedSectionIds,
   shouldExpandSection,
-} from "../config/personalization.js";
+} from "./personalization.js";
 
 describe("getOrderedSectionIds", () => {
   it("returns default order when no content types are provided", () => {

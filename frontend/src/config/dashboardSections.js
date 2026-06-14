@@ -1,10 +1,8 @@
-import { InsightIcon, MemeIcon, NewsIcon, PricesIcon } from "../components/icons/SectionIcons";
-
 export const DASHBOARD_SECTIONS = [
-  { id: "section-insight", label: "AI Insight", icon: InsightIcon },
-  { id: "section-news", label: "Market News", icon: NewsIcon },
-  { id: "section-prices", label: "Coin Prices", icon: PricesIcon },
-  { id: "section-meme", label: "Market Break", icon: MemeIcon },
+  { id: "section-insight", label: "AI Insight", iconKey: "insight" },
+  { id: "section-news", label: "Market News", iconKey: "news" },
+  { id: "section-prices", label: "Coin Prices", iconKey: "prices" },
+  { id: "section-meme", label: "Market Break", iconKey: "meme" },
 ];
 
 export const SECTION_IDS = DASHBOARD_SECTIONS.map((section) => section.id);

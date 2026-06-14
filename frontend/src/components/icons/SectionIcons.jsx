@@ -53,3 +53,10 @@ export function MemeIcon({ className = "h-5 w-5" }) {
     </svg>
   );
 }
+
+export const SECTION_ICON_MAP = {
+  insight: InsightIcon,
+  news: NewsIcon,
+  prices: PricesIcon,
+  meme: MemeIcon,
+};

@@ -1,6 +1,6 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
-import { resolveAssetMeta, resolveFocusAssets } from "../config/cryptoAssets.js";
+import { resolveAssetMeta, resolveFocusAssets } from "./cryptoAssets.js";
 
 describe("resolveAssetMeta", () => {
   it("resolves asset names and tickers to known metadata", () => {
