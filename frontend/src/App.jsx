@@ -10,6 +10,8 @@ import { PublicOnlyRoute, RequireAuth } from "./components/ProtectedRoute";
 
 import { AuthProvider } from "./context/AuthContext";
 
+import Dashboard from "./pages/Dashboard";
+
 import Login from "./pages/Login";
 
 import Onboarding from "./pages/Onboarding";
@@ -22,7 +24,7 @@ export default function App() {
       <BrowserRouter>
         <AuthExpiryHandler />
         <AnimatedRoutes>
-          <Route path="/" element={<Navigate to="/login" replace />} />
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
 
           <Route element={<PublicOnlyRoute />}>
             <Route path="/login" element={<Login />} />
@@ -31,6 +33,10 @@ export default function App() {
 
           <Route element={<RequireAuth requireOnboarding={false} />}>
             <Route path="/onboarding" element={<Onboarding />} />
+          </Route>
+
+          <Route element={<RequireAuth requireOnboarding />}>
+            <Route path="/dashboard" element={<Dashboard />} />
           </Route>
 
           <Route path="*" element={<NotFoundRedirect />} />
