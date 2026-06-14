@@ -1,13 +1,22 @@
 import { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import AuthLayout, { AuthLink } from "../components/AuthLayout";
+import Alert from "../components/ui/Alert";
+import Button from "../components/ui/Button";
+import FormField from "../components/ui/FormField";
+import Input from "../components/ui/Input";
 import { getApiErrorMessage } from "../utils/apiError";
+import { resolvePostAuthPath } from "../utils/resolvePostAuthPath";
 
 export default function Login() {
   const navigate = useNavigate();
   const location = useLocation();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { login } = useAuth();
+
+  const sessionExpired = searchParams.get("reason") === "session_expired";
+  const signupSuccess = location.state?.signupSuccess === true;
 
   const [form, setForm] = useState({
     email: location.state?.email || "",
@@ -16,21 +25,29 @@ export default function Login() {
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
+  function clearSessionNotice() {
+    if (sessionExpired) {
+      setSearchParams({}, { replace: true });
+    }
+  }
+
   function handleChange(event) {
     const { name, value } = event.target;
+    clearSessionNotice();
     setForm((prev) => ({ ...prev, [name]: value }));
   }
 
   async function handleSubmit(event) {
     event.preventDefault();
     setError("");
+    clearSessionNotice();
     setSubmitting(true);
 
     try {
       const user = await login(form.email, form.password);
-      navigate(user.onboarding_completed ? "/dashboard" : "/onboarding", { replace: true });
+      navigate(resolvePostAuthPath({ isAuthenticated: true, user }), { replace: true });
     } catch (err) {
-      setError(getApiErrorMessage(err, "Unable to log in. Check your credentials."));
+      setError(getApiErrorMessage(err, "We couldn't sign you in. Please check your email and password."));
     } finally {
       setSubmitting(false);
     }
@@ -47,20 +64,16 @@ export default function Login() {
       }
     >
       <form onSubmit={handleSubmit} className="space-y-5">
-        {error && (
-          <div
-            role="alert"
-            className="rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-300"
-          >
-            {error}
-          </div>
+        {signupSuccess && (
+          <Alert variant="success">Account created! Sign in to continue.</Alert>
         )}
+        {sessionExpired && (
+          <Alert variant="info">Your session expired. Please sign in again.</Alert>
+        )}
+        {error && <Alert variant="error">{error}</Alert>}
 
-        <div>
-          <label htmlFor="email" className="mb-1.5 block text-sm font-medium text-slate-300">
-            Email
-          </label>
-          <input
+        <FormField label="Email" htmlFor="email">
+          <Input
             id="email"
             name="email"
             type="email"
@@ -68,16 +81,12 @@ export default function Login() {
             autoComplete="email"
             value={form.email}
             onChange={handleChange}
-            className="w-full rounded-lg border border-slate-700 bg-slate-950 px-4 py-2.5 text-white outline-none ring-indigo-500 focus:ring-2"
             placeholder="you@example.com"
           />
-        </div>
+        </FormField>
 
-        <div>
-          <label htmlFor="password" className="mb-1.5 block text-sm font-medium text-slate-300">
-            Password
-          </label>
-          <input
+        <FormField label="Password" htmlFor="password">
+          <Input
             id="password"
             name="password"
             type="password"
@@ -85,18 +94,13 @@ export default function Login() {
             autoComplete="current-password"
             value={form.password}
             onChange={handleChange}
-            className="w-full rounded-lg border border-slate-700 bg-slate-950 px-4 py-2.5 text-white outline-none ring-indigo-500 focus:ring-2"
             placeholder="••••••••"
           />
-        </div>
+        </FormField>
 
-        <button
-          type="submit"
-          disabled={submitting}
-          className="w-full rounded-lg bg-indigo-500 px-4 py-2.5 font-semibold text-white transition hover:bg-indigo-400 disabled:cursor-not-allowed disabled:opacity-60"
-        >
+        <Button type="submit" variant="primary" size="md" fullWidth disabled={submitting}>
           {submitting ? "Signing in..." : "Log in"}
-        </button>
+        </Button>
       </form>
     </AuthLayout>
   );

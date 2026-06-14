@@ -2,6 +2,10 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { signup } from "../api/auth";
 import AuthLayout, { AuthLink } from "../components/AuthLayout";
+import Alert from "../components/ui/Alert";
+import Button from "../components/ui/Button";
+import FormField from "../components/ui/FormField";
+import Input from "../components/ui/Input";
 import { getApiErrorMessage } from "../utils/apiError";
 
 export default function Signup() {
@@ -18,13 +22,19 @@ export default function Signup() {
   async function handleSubmit(event) {
     event.preventDefault();
     setError("");
+
+    if (form.password.length < 8) {
+      setError("Password should have at least 8 characters.");
+      return;
+    }
+
     setSubmitting(true);
 
     try {
       await signup(form);
-      navigate("/login", { state: { email: form.email } });
+      navigate("/login", { state: { email: form.email, signupSuccess: true } });
     } catch (err) {
-      setError(getApiErrorMessage(err, "Unable to create account."));
+      setError(getApiErrorMessage(err, "We couldn't create your account. Please try again."));
     } finally {
       setSubmitting(false);
     }
@@ -41,20 +51,10 @@ export default function Signup() {
       }
     >
       <form onSubmit={handleSubmit} className="space-y-5">
-        {error && (
-          <div
-            role="alert"
-            className="rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-300"
-          >
-            {error}
-          </div>
-        )}
+        {error && <Alert variant="error">{error}</Alert>}
 
-        <div>
-          <label htmlFor="name" className="mb-1.5 block text-sm font-medium text-slate-300">
-            Name
-          </label>
-          <input
+        <FormField label="Name" htmlFor="name">
+          <Input
             id="name"
             name="name"
             type="text"
@@ -62,16 +62,12 @@ export default function Signup() {
             autoComplete="name"
             value={form.name}
             onChange={handleChange}
-            className="w-full rounded-lg border border-slate-700 bg-slate-950 px-4 py-2.5 text-white outline-none ring-indigo-500 focus:ring-2"
             placeholder="Jane Doe"
           />
-        </div>
+        </FormField>
 
-        <div>
-          <label htmlFor="email" className="mb-1.5 block text-sm font-medium text-slate-300">
-            Email
-          </label>
-          <input
+        <FormField label="Email" htmlFor="email">
+          <Input
             id="email"
             name="email"
             type="email"
@@ -79,36 +75,28 @@ export default function Signup() {
             autoComplete="email"
             value={form.email}
             onChange={handleChange}
-            className="w-full rounded-lg border border-slate-700 bg-slate-950 px-4 py-2.5 text-white outline-none ring-indigo-500 focus:ring-2"
             placeholder="you@example.com"
           />
-        </div>
+        </FormField>
 
-        <div>
-          <label htmlFor="password" className="mb-1.5 block text-sm font-medium text-slate-300">
-            Password
-          </label>
-          <input
+        <FormField label="Password" htmlFor="password">
+          <Input
             id="password"
             name="password"
             type="password"
             required
-            minLength={6}
+            minLength={8}
             autoComplete="new-password"
             value={form.password}
             onChange={handleChange}
-            className="w-full rounded-lg border border-slate-700 bg-slate-950 px-4 py-2.5 text-white outline-none ring-indigo-500 focus:ring-2"
             placeholder="••••••••"
           />
-        </div>
+          <p className="mt-1.5 text-xs text-piggy-gray">Use at least 8 characters.</p>
+        </FormField>
 
-        <button
-          type="submit"
-          disabled={submitting}
-          className="w-full rounded-lg bg-indigo-500 px-4 py-2.5 font-semibold text-white transition hover:bg-indigo-400 disabled:cursor-not-allowed disabled:opacity-60"
-        >
+        <Button type="submit" variant="primary" size="md" fullWidth disabled={submitting}>
           {submitting ? "Creating account..." : "Sign up"}
-        </button>
+        </Button>
       </form>
     </AuthLayout>
   );

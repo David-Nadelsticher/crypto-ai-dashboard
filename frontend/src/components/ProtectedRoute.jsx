@@ -1,10 +1,19 @@
 import { Navigate, Outlet } from "react-router-dom";
+import PiggyAvatar from "./ui/PiggyAvatar";
 import { useAuth } from "../context/AuthContext";
+import { resolvePostAuthPath } from "../utils/resolvePostAuthPath";
 
-function LoadingScreen() {
+export function LoadingScreen() {
   return (
-    <div className="flex min-h-screen items-center justify-center">
-      <div className="h-8 w-8 animate-spin rounded-full border-2 border-indigo-400 border-t-transparent" />
+    <div className="crypto-bg-pattern flex min-h-screen flex-col items-center justify-center gap-4">
+      <PiggyAvatar size="sm" className="motion-scale-in motion-reduce:animate-none" />
+      <div className="h-8 w-8 animate-spin rounded-full border-2 border-piggy-pink border-t-transparent motion-reduce:animate-none" />
+      <p
+        className="text-sm text-piggy-gray motion-slide-up motion-reduce:animate-none"
+        style={{ "--motion-delay": "80ms" }}
+      >
+        Piggy is preparing today&apos;s brief…
+      </p>
     </div>
   );
 }
@@ -17,7 +26,7 @@ export function PublicOnlyRoute() {
   if (isAuthenticated) {
     return (
       <Navigate
-        to={user.onboarding_completed ? "/dashboard" : "/onboarding"}
+        to={resolvePostAuthPath({ isAuthenticated, user })}
         replace
       />
     );

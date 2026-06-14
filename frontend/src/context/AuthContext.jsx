@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { TOKEN_KEY } from "../api/client";
 import { fetchCurrentUser, login as loginRequest } from "../api/auth";
+import { AUTH_EXPIRED_EVENT } from "../utils/authEvents";
 
 const USER_KEY = "user";
 
@@ -35,12 +36,14 @@ export function AuthProvider({ children }) {
     setUser(null);
   }, []);
 
-  const refreshUser = useCallback(async () => {
-    const userData = await fetchCurrentUser();
-    localStorage.setItem(USER_KEY, JSON.stringify(userData));
-    setUser(userData);
-    return userData;
-  }, []);
+  useEffect(() => {
+    function handleAuthExpired() {
+      clearSession();
+    }
+
+    window.addEventListener(AUTH_EXPIRED_EVENT, handleAuthExpired);
+    return () => window.removeEventListener(AUTH_EXPIRED_EVENT, handleAuthExpired);
+  }, [clearSession]);
 
   useEffect(() => {
     let cancelled = false;
@@ -77,14 +80,20 @@ export function AuthProvider({ children }) {
   const login = useCallback(
     async (email, password) => {
       const { access_token } = await loginRequest({ email, password });
-      localStorage.setItem(TOKEN_KEY, access_token);
-      setToken(access_token);
 
-      const userData = await fetchCurrentUser();
-      persistSession(access_token, userData);
-      return userData;
+      try {
+        localStorage.setItem(TOKEN_KEY, access_token);
+        setToken(access_token);
+
+        const userData = await fetchCurrentUser();
+        persistSession(access_token, userData);
+        return userData;
+      } catch (error) {
+        clearSession();
+        throw error;
+      }
     },
-    [persistSession],
+    [persistSession, clearSession],
   );
 
   const logout = useCallback(() => {
@@ -105,9 +114,8 @@ export function AuthProvider({ children }) {
       login,
       logout,
       updateUser,
-      refreshUser,
     }),
-    [token, user, loading, login, logout, updateUser, refreshUser],
+    [token, user, loading, login, logout, updateUser],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

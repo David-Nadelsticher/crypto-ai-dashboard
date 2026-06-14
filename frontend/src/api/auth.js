@@ -29,3 +29,12 @@ export async function submitOnboarding({ assets, investor_type, content_types })
   });
   return data;
 }
+
+export async function updatePreferences({ assets, investor_type, content_types }) {
+  const { data } = await api.patch("/me/preferences", {
+    assets,
+    investor_type,
+    content_types,
+  });
+  return data;
+}
