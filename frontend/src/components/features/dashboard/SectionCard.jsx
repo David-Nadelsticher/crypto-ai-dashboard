@@ -1,7 +1,7 @@
 import { useId, useState } from "react";
-import FeedbackControls from "./FeedbackControls";
-import ContentSkeleton from "./ContentSkeleton";
-import StateMessage from "./StateMessage";
+import FeedbackControls from "../feedback/FeedbackControls";
+import ContentSkeleton from "../../ui/ContentSkeleton";
+import StateMessage from "../../ui/StateMessage";
 
 const VARIANT_STYLES = {
   hero: {

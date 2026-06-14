@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Routes, useLocation } from "react-router-dom";
-import usePrefersReducedMotion from "../hooks/usePrefersReducedMotion";
+import usePrefersReducedMotion from "../../hooks/usePrefersReducedMotion";
 
 export default function AnimatedRoutes({ children }) {
   const location = useLocation();

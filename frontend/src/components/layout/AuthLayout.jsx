@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import PiggyAvatar from "./ui/PiggyAvatar";
+import PiggyAvatar from "../brand/PiggyAvatar";
 
 export default function AuthLayout({ title, subtitle, children, footer }) {
   return (

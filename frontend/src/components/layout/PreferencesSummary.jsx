@@ -1,5 +1,5 @@
 import { resolveFocusAssets } from "../../config/cryptoAssets";
-import CoinIcon from "../ui/CoinIcon";
+import CoinIcon from "../brand/CoinIcon";
 
 export default function PreferencesSummary({ preferences, variant = "default" }) {
   if (!preferences) return null;

@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AUTH_EXPIRED_EVENT } from "../utils/authEvents";
 
-export default function AuthExpiryHandler() {
+export function useAuthExpiryHandler() {
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -13,6 +13,9 @@ export default function AuthExpiryHandler() {
     window.addEventListener(AUTH_EXPIRED_EVENT, handleAuthExpired);
     return () => window.removeEventListener(AUTH_EXPIRED_EVENT, handleAuthExpired);
   }, [navigate]);
+}
 
+export default function AuthExpiryHandler() {
+  useAuthExpiryHandler();
   return null;
 }

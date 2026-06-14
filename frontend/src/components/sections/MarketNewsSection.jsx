@@ -1,7 +1,7 @@
-import SectionCard from "../ui/SectionCard";
-import SectionContent from "../ui/SectionContent";
+import SectionCard from "../features/dashboard/SectionCard";
+import SectionContent from "../features/dashboard/SectionContent";
 import ExternalLink from "../ui/ExternalLink";
-import { NewsIcon } from "../ui/SectionIcons";
+import { NewsIcon } from "../icons/SectionIcons";
 import { formatTimestamp } from "../../utils/format";
 import { buildNewsSnapshot } from "../../utils/voteSnapshots";
 

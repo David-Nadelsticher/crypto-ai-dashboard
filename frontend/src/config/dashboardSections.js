@@ -1,4 +1,4 @@
-import { InsightIcon, MemeIcon, NewsIcon, PricesIcon } from "../components/ui/SectionIcons";
+import { InsightIcon, MemeIcon, NewsIcon, PricesIcon } from "../components/icons/SectionIcons";
 
 export const DASHBOARD_SECTIONS = [
   { id: "section-insight", label: "AI Insight", icon: InsightIcon },

@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { formatLastUpdated } from "../../utils/format";
-import PiggyAvatar from "../ui/PiggyAvatar";
+import PiggyAvatar from "../brand/PiggyAvatar";
 import Spinner from "../ui/Spinner";
 import Toast from "../ui/Toast";
-import { DashboardIcon } from "../ui/SectionIcons";
+import { DashboardIcon } from "../icons/SectionIcons";
 import { DASHBOARD_SECTIONS } from "../../config/dashboardSections";
 
 const DEFAULT_NAV_ITEMS = DASHBOARD_SECTIONS;

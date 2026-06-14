@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react";
-import SectionCard from "../ui/SectionCard";
-import SectionContent from "../ui/SectionContent";
-import PriceSparkline from "../ui/PriceSparkline";
-import PricesIllustration from "../ui/PricesIllustration";
-import { PricesIcon } from "../ui/SectionIcons";
-import CoinIcon from "../ui/CoinIcon";
+import SectionCard from "../features/dashboard/SectionCard";
+import SectionContent from "../features/dashboard/SectionContent";
+import PriceSparkline from "../features/prices/PriceSparkline";
+import PricesIllustration from "../illustrations/PricesIllustration";
+import { PricesIcon } from "../icons/SectionIcons";
+import CoinIcon from "../brand/CoinIcon";
 import { resolveAssetMeta } from "../../config/cryptoAssets";
 import { SECTION_BY_ID } from "../../config/dashboardSections";
 import { formatPercent, formatUsd, formatVolume } from "../../utils/format";

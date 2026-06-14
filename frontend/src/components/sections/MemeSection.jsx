@@ -1,8 +1,8 @@
-import SectionCard from "../ui/SectionCard";
-import SectionContent from "../ui/SectionContent";
+import SectionCard from "../features/dashboard/SectionCard";
+import SectionContent from "../features/dashboard/SectionContent";
 import ExternalLink from "../ui/ExternalLink";
 import LazyImage from "../ui/LazyImage";
-import { MemeIcon } from "../ui/SectionIcons";
+import { MemeIcon } from "../icons/SectionIcons";
 import { SECTION_BY_ID } from "../../config/dashboardSections";
 import { buildMemeSnapshot } from "../../utils/voteSnapshots";
 

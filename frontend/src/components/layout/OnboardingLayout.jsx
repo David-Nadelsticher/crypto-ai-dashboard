@@ -1,5 +1,5 @@
-import PiggyAvatar from "./ui/PiggyAvatar";
-import OnboardingIllustration from "./ui/OnboardingIllustration";
+import PiggyAvatar from "../brand/PiggyAvatar";
+import OnboardingIllustration from "../illustrations/OnboardingIllustration";
 
 export default function OnboardingLayout({ title, subtitle, overline, intro, children }) {
   return (

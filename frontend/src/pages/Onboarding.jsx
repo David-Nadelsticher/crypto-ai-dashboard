@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { submitOnboarding } from "../api/auth";
-import OnboardingLayout from "../components/OnboardingLayout";
+import OnboardingLayout from "../components/layout/OnboardingLayout";
 import Alert from "../components/ui/Alert";
 import Button from "../components/ui/Button";
 import CheckboxCard from "../components/ui/CheckboxCard";
 import OnboardingProgress from "../components/ui/OnboardingProgress";
-import PiggyAvatar from "../components/ui/PiggyAvatar";
+import PiggyAvatar from "../components/brand/PiggyAvatar";
 import RadioCard from "../components/ui/RadioCard";
 import { useAuth } from "../context/AuthContext";
 import usePrefersReducedMotion from "../hooks/usePrefersReducedMotion";

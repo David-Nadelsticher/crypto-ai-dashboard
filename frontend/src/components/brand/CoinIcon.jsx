@@ -1,4 +1,4 @@
-import LazyImage from "./LazyImage";
+import LazyImage from "../ui/LazyImage";
 
 const SIZE_CLASSES = {
   sm: "h-4 w-4 text-[8px]",

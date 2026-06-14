@@ -1,7 +1,7 @@
 import { MobileMenuButton } from "./Sidebar";
 import MarketSnapshotBar from "./MarketSnapshotBar";
 import PreferencesSummary from "./PreferencesSummary";
-import HeaderPiggyIllustration from "../ui/HeaderPiggyIllustration";
+import HeaderPiggyIllustration from "../illustrations/HeaderPiggyIllustration";
 
 export default function MainHeader({
   userName,

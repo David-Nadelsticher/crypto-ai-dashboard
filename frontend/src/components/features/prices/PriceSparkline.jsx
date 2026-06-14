@@ -1,4 +1,4 @@
-import { buildSparklinePath } from "../../utils/priceSparkline.js";
+import { buildSparklinePath } from "../../../utils/priceSparkline.js";
 
 export default function PriceSparkline({ series, change24h, seedKey, className = "" }) {
   const positive = (change24h ?? 0) >= 0;

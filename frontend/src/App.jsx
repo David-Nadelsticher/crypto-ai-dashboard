@@ -1,12 +1,12 @@
 import { BrowserRouter, Navigate, Route } from "react-router-dom";
 
-import AnimatedRoutes from "./components/AnimatedRoutes";
+import AnimatedRoutes from "./components/routes/AnimatedRoutes";
 
-import AuthExpiryHandler from "./components/AuthExpiryHandler";
+import AuthExpiryHandler from "./hooks/useAuthExpiryHandler";
 
-import NotFoundRedirect from "./components/NotFoundRedirect";
+import NotFoundRedirect from "./components/routes/NotFoundRedirect";
 
-import { PublicOnlyRoute, RequireAuth } from "./components/ProtectedRoute";
+import { PublicOnlyRoute, RequireAuth } from "./components/routes/ProtectedRoute";
 
 import { AuthProvider } from "./context/AuthContext";
 

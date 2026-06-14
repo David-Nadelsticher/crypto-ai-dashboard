@@ -1,6 +1,6 @@
 import { Navigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
-import { resolvePostAuthPath } from "../utils/resolvePostAuthPath";
+import { useAuth } from "../../context/AuthContext";
+import { resolvePostAuthPath } from "../../utils/resolvePostAuthPath";
 import { LoadingScreen } from "./ProtectedRoute";
 
 export default function NotFoundRedirect() {

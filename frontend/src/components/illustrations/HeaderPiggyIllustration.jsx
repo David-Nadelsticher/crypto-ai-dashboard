@@ -1,4 +1,4 @@
-import LazyImage from "./LazyImage";
+import LazyImage from "../ui/LazyImage";
 
 function HeaderPiggyFallback({ className = "" }) {
   return (

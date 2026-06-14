@@ -1,7 +1,7 @@
 import { Navigate, Outlet } from "react-router-dom";
-import PiggyAvatar from "./ui/PiggyAvatar";
-import { useAuth } from "../context/AuthContext";
-import { resolvePostAuthPath } from "../utils/resolvePostAuthPath";
+import PiggyAvatar from "../brand/PiggyAvatar";
+import { useAuth } from "../../context/AuthContext";
+import { resolvePostAuthPath } from "../../utils/resolvePostAuthPath";
 
 export function LoadingScreen() {
   return (

@@ -1,4 +1,4 @@
-import StateMessage from "./StateMessage";
+import StateMessage from "../../ui/StateMessage";
 
 export default function SectionContent({ isEmpty, emptyMessage, children, renderContent }) {
   if (isEmpty) {

@@ -1,7 +1,7 @@
-import SectionCard from "../ui/SectionCard";
-import SectionContent from "../ui/SectionContent";
-import InsightIllustration from "../ui/InsightIllustration";
-import { InsightIcon } from "../ui/SectionIcons";
+import SectionCard from "../features/dashboard/SectionCard";
+import SectionContent from "../features/dashboard/SectionContent";
+import InsightIllustration from "../illustrations/InsightIllustration";
+import { InsightIcon } from "../icons/SectionIcons";
 import { SECTION_BY_ID } from "../../config/dashboardSections";
 import { resolveFocusAssets } from "../../config/cryptoAssets";
 import {
@@ -10,7 +10,7 @@ import {
   formatPersonalizationContext,
   splitInsightParagraphs,
 } from "../../utils/insightMeta";
-import CoinIcon from "../ui/CoinIcon";
+import CoinIcon from "../brand/CoinIcon";
 import { buildInsightSnapshot } from "../../utils/voteSnapshots";
 
 const SECTION_META = SECTION_BY_ID["section-insight"];

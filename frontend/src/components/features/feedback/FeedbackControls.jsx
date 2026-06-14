@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { submitVote } from "../../api/votes";
-import Spinner from "./Spinner";
+import { submitVote } from "../../../api/votes";
+import Spinner from "../../ui/Spinner";
 
 function ThumbUpIcon({ className }) {
   return (
