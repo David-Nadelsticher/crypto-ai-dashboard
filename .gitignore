@@ -27,6 +27,7 @@ build/Release
 .next
 out/
 .nuxt
+frontend/.vite/
 
 # dotenv environment variable files
 .env
@@ -91,7 +92,8 @@ htmlcov/
 ._*
 
 # Custom folder icons
-Icon
+Icon
+
 
 # Volume root files
 .DocumentRevisions-V100
