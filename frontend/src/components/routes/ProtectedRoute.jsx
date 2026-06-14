@@ -1,5 +1,6 @@
 import { Navigate, Outlet } from "react-router-dom";
 import PiggyAvatar from "../brand/PiggyAvatar";
+import Spinner from "../ui/Spinner";
 import { useAuth } from "../../context/AuthContext";
 import { resolvePostAuthPath } from "../../utils/resolvePostAuthPath";
 
@@ -7,7 +8,7 @@ export function LoadingScreen() {
   return (
     <div className="crypto-bg-pattern flex min-h-screen flex-col items-center justify-center gap-4">
       <PiggyAvatar size="sm" className="motion-scale-in motion-reduce:animate-none" />
-      <div className="h-8 w-8 animate-spin rounded-full border-2 border-piggy-pink border-t-transparent motion-reduce:animate-none" />
+      <Spinner size="lg" variant="ring" />
       <p
         className="text-sm text-piggy-gray motion-slide-up motion-reduce:animate-none"
         style={{ "--motion-delay": "80ms" }}

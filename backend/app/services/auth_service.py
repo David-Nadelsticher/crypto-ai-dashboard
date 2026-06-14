@@ -38,7 +38,7 @@ async def register_user(user_data: UserCreate) -> UserResponse:
 
             status_code=status.HTTP_400_BAD_REQUEST,
 
-            detail="A user with this email already exists",
+            detail="An account with this email already exists. Try logging in instead.",
 
         )
 
@@ -86,7 +86,7 @@ async def register_user(user_data: UserCreate) -> UserResponse:
 
             status_code=status.HTTP_400_BAD_REQUEST,
 
-            detail="A user with this email already exists",
+            detail="An account with this email already exists. Try logging in instead.",
 
         )
 
@@ -108,7 +108,7 @@ async def authenticate_user(email: str, password: str) -> Token:
 
             status_code=status.HTTP_401_UNAUTHORIZED,
 
-            detail="Incorrect email or password",
+            detail="That email or password doesn't look right. Please try again.",
 
             headers={"WWW-Authenticate": "Bearer"},
 
@@ -124,7 +124,7 @@ async def authenticate_user(email: str, password: str) -> Token:
 
             status_code=status.HTTP_401_UNAUTHORIZED,
 
-            detail="Incorrect email or password",
+            detail="That email or password doesn't look right. Please try again.",
 
             headers={"WWW-Authenticate": "Bearer"},
 

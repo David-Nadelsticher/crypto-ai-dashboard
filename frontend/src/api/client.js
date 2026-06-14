@@ -6,6 +6,15 @@ const USER_KEY = "user";
 
 const PUBLIC_PATHS = ["/login", "/signup"];
 
+const AUTH_ENDPOINTS = ["/login", "/signup"];
+
+function isAuthEndpoint(url) {
+  const requestPath = url?.split("?")[0] ?? "";
+  return AUTH_ENDPOINTS.some(
+    (path) => requestPath === path || requestPath.endsWith(path),
+  );
+}
+
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000",
   headers: {
@@ -33,9 +42,13 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      localStorage.removeItem(TOKEN_KEY);
-      localStorage.removeItem(USER_KEY);
-      dispatchAuthExpired();
+      const hadToken = Boolean(localStorage.getItem(TOKEN_KEY));
+
+      if (!isAuthEndpoint(error.config?.url) && hadToken) {
+        localStorage.removeItem(TOKEN_KEY);
+        localStorage.removeItem(USER_KEY);
+        dispatchAuthExpired();
+      }
     }
     return Promise.reject(error);
   },

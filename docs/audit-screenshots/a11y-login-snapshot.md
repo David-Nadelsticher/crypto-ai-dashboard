@@ -1,0 +1,27 @@
+- generic [ref=e4] [box=416,93,448,614]:
+  - generic [ref=e5] [box=449,126,382,152]:
+    - img "Piggy" [ref=e7] [box=616,126,48,48]
+    - paragraph [ref=e8] [box=449,190,382,20]: Piggy Daily
+    - heading "Create your account" [level=1] [ref=e9] [box=449,218,382,32]
+    - paragraph [ref=e10] [box=449,258,382,20]: Start building your personalized crypto dashboard.
+  - generic [ref=e11] [box=449,310,382,320]:
+    - generic [ref=e12] [box=449,310,382,72]:
+      - generic [ref=e13] [box=449,310,382,20]: Name
+      - textbox "Name" [ref=e14] [box=449,336,382,46]:
+        - /placeholder: Jane Doe
+        - text: Audit User
+    - generic [ref=e15] [box=449,402,382,72]:
+      - generic [ref=e16] [box=449,402,382,20]: Email
+      - textbox "Email" [ref=e17] [box=449,428,382,46]:
+        - /placeholder: you@example.com
+        - text: audit-1781338813363@example.com
+    - generic [ref=e18] [box=449,494,382,72]:
+      - generic [ref=e19] [box=449,494,382,20]: Password
+      - textbox "Password" [ref=e20] [box=449,520,382,46]:
+        - /placeholder: ••••••••
+        - text: password123
+    - button "Creating account..." [disabled] [ref=e21] [box=449,586,382,44]
+  - generic [ref=e22] [box=449,654,382,20]:
+    - text: Already have an account?
+    - link "Log in" [ref=e23] [cursor=pointer] [box=707,655,41,17]:
+      - /url: /login

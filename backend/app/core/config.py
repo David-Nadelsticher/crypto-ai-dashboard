@@ -23,7 +23,7 @@ class Settings(BaseSettings):
     OPENROUTER_MODEL: str = "meta-llama/llama-3-8b-instruct:free"
     OPENROUTER_SITE_URL: str = "http://localhost:5173"
     OPENROUTER_APP_NAME: str = "Crypto AI Dashboard"
-    SEED_TEST_EMAIL: str = "test1@example.com"
+    SEED_TEST_EMAIL: str = "test@example.com"
     SEED_TEST_PASSWORD: str = "password123"
 
     @field_validator("JWT_SECRET_KEY")

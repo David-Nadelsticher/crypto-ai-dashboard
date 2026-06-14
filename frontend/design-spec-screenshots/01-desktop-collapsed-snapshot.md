@@ -1,0 +1,259 @@
+- generic [ref=e3] [box=0,0,1440,1528]:
+  - link "Skip to dashboard content" [ref=e4] [cursor=pointer] [box=-1,-1,1,1]:
+    - /url: "#dashboard-content"
+  - complementary "Sidebar navigation" [ref=e5] [box=0,0,256,1528]:
+    - generic [ref=e6] [box=24,24,207,1480]:
+      - generic [ref=e7] [box=24,24,207,44]:
+        - img "Piggy mascot" [ref=e8] [box=24,26,40,40]
+        - generic [ref=e9] [box=76,24,102,44]:
+          - paragraph [ref=e10] [box=76,24,102,28]: Piggy Daily
+          - paragraph [ref=e11] [box=76,52,102,16]: Your crypto editor
+      - navigation "Dashboard navigation" [ref=e12] [box=24,100,207,405]:
+        - generic [ref=e13] [box=24,100,207,44]:
+          - img [ref=e15] [box=42,114,16,16]
+          - generic [ref=e17] [box=74,112,74,20]: DashBoard
+        - button "AI Insight" [ref=e18] [cursor=pointer] [box=24,148,207,44]:
+          - img [ref=e20] [box=42,162,16,16]
+          - generic [ref=e22] [box=74,160,63,20]: AI Insight
+        - button "Market News" [ref=e23] [cursor=pointer] [box=24,196,207,44]:
+          - img [ref=e25] [box=42,210,16,16]
+          - generic [ref=e27] [box=74,208,87,20]: Market News
+        - button "Fun Crypto Meme" [ref=e28] [cursor=pointer] [box=24,244,207,44]:
+          - img [ref=e30] [box=42,258,16,16]
+          - generic [ref=e32] [box=74,256,118,20]: Fun Crypto Meme
+        - button "Coin Prices" [ref=e33] [cursor=pointer] [box=24,292,207,44]:
+          - img [ref=e35] [box=42,306,16,16]
+          - generic [ref=e37] [box=74,304,76,20]: Coin Prices
+        - generic [ref=e38] [box=24,340,207,165]:
+          - link "Edit preferences" [ref=e39] [cursor=pointer] [box=24,353,207,40]:
+            - /url: /settings
+          - button "Refresh" [ref=e295] [cursor=pointer] [box=24,397,207,40]
+          - button "Log out" [ref=e44] [cursor=pointer] [box=24,441,207,40]
+          - paragraph [ref=e296] [box=24,485,207,20]: Updated 8:36 PM
+      - generic [ref=e46] [box=0,1080,255,448]:
+        - img [box=0,1035,255,493]
+  - main [ref=e47] [box=256,0,1184,1528]:
+    - generic [ref=e49] [box=296,40,672,177]:
+      - heading "Hello, Test User" [level=1] [ref=e50] [box=296,40,672,36]
+      - paragraph [ref=e51] [box=296,84,672,24]: Your personalized daily crypto brief.
+      - generic [ref=e52] [box=296,124,672,93]:
+        - paragraph [ref=e53] [box=313,137,638,16]: "Today's brief is based on:"
+        - paragraph [ref=e54] [box=313,157,638,23]: Cardano · Solana · Ethereum · Bitcoin · Day Trader · Market News · Fun · Charts
+        - paragraph [ref=e297] [box=313,188,638,16]: "Market Mood: Mixed"
+    - generic [ref=e55] [box=400,249,896,1239]:
+      - article [ref=e56] [box=400,249,896,295]:
+        - generic [ref=e57] [box=434,283,828,158]:
+          - button "1 AI Insight of the Day Open full AI insight" [ref=e298] [cursor=pointer] [box=426,283,844,44]:
+            - generic [ref=e60] [box=434,287,36,36]: "1"
+            - img [ref=e62] [box=484,295,20,20]
+            - heading "AI Insight of the Day" [level=2] [ref=e64] [box=518,289,700,32]
+            - button "Open full AI insight" [ref=e299] [box=1230,289,32,32]:
+              - img [ref=e300] [box=1236,295,20,20]
+          - generic [ref=e302] [box=434,343,828,421]:
+            - generic [ref=e306] [box=434,343,652,340]:
+              - heading [level=3] [ref=e307] [box=434,343,652,20]: Piggy's Take
+              - paragraph [ref=e308] [box=434,375,652,280]: "**Market News + Charts:** Bitcoin (BTC) held just above $62k, with the 4‑hour RSI hovering near 55, suggesting modest bullish pressure but still room for correction; Ethereum (ETH) slipped to $4,120 on weaker DeFi inflows, while Cardano (ADA) rallied 3% after its upcoming governance vote was confirmed, and Solana (SOL) bounced 2% on the release of a new staking incentive program. **Sentiment:** Overall trader sentiment remains cautiously optimistic, driven by technical resilience in BTC but mixed fundamentals across altcoins. **Risk awareness:** Keep an eye on volatility spikes around macro data releases and protocol updates, as rapid price swings can quickly erode tight day‑trade margins."
+              - generic [ref=e309] [box=434,667,652,16]:
+                - generic [ref=e310] [box=434,667,100,16]:
+                  - term [ref=e311] [box=434,667,70,16]: "Confidence:"
+                  - definition [ref=e312] [box=510,667,24,16]: Low
+                - generic [ref=e313] [box=550,667,171,16]:
+                  - term [ref=e314] [box=550,667,38,16]: "Focus:"
+                  - definition [ref=e315] [box=594,667,127,16]: ADA · SOL · ETH · BTC
+            - generic [ref=e316] [box=434,699,828,61]:
+              - paragraph [ref=e317] [box=434,716,828,16]: "Source: OpenRouter (openai/gpt-oss-120b:free)"
+              - generic [ref=e318] [box=434,740,828,20]:
+                - generic [ref=e319] [box=434,742,80,16]: "Related coins:"
+                - generic [ref=e320] [box=522,740,69,20]: Cardano
+                - generic [ref=e321] [box=598,740,59,20]: Solana
+                - generic [ref=e322] [box=665,740,75,20]: Ethereum
+                - generic [ref=e323] [box=748,740,59,20]: Bitcoin
+          - generic [ref=e325] [box=434,343,828,98]:
+            - heading "Piggy's Take" [level=3] [ref=e326] [box=434,343,828,20]
+            - paragraph [ref=e327] [box=434,371,828,46]: "**Market News + Charts:** Bitcoin (BTC) held just above $62k, with the 4‑hour RSI hovering near 55, suggesting modest bullish pressure but still room for correction; Ethereum (ETH) slipped to $4,120 on weaker DeFi inflows, while Cardano (ADA) rallied 3% after its upcoming governance vote was confirmed, and Solana (SOL) bounced 2% on the release of a new staking incentive program."
+            - generic [ref=e328] [box=434,424,828,16]:
+              - generic [ref=e329] [box=434,424,100,16]:
+                - term [ref=e330] [box=434,424,70,16]: "Confidence:"
+                - definition [ref=e331] [box=510,424,24,16]: Low
+              - generic [ref=e332] [box=550,424,171,16]:
+                - term [ref=e333] [box=550,424,38,16]: "Focus:"
+                - definition [ref=e334] [box=594,424,127,16]: ADA · SOL · ETH · BTC
+        - group "Rate this content" [ref=e73] [box=434,481,828,28]:
+          - button "Helpful" [ref=e74] [cursor=pointer] [box=434,481,87,28]:
+            - img [ref=e75] [box=446,487,16,16]
+            - text: Helpful
+          - button "Not helpful" [ref=e77] [cursor=pointer] [box=529,481,109,28]:
+            - img [ref=e78] [box=541,487,16,16]
+            - text: Not helpful
+      - article [ref=e80] [box=400,567,896,253]:
+        - generic [ref=e81] [box=425,592,846,134]:
+          - button "2 Market News Open full market news" [ref=e83] [cursor=pointer] [box=417,592,862,44]:
+            - generic [ref=e84] [box=425,596,36,36]: "2"
+            - img [ref=e86] [box=475,604,20,20]
+            - heading "Market News" [level=2] [ref=e88] [box=509,600,718,28]
+            - button "Open full market news" [ref=e89] [box=1239,598,32,32]:
+              - img [ref=e90] [box=1245,604,20,20]
+          - generic [ref=e92] [box=425,652,846,581]:
+            - list [ref=e94] [box=425,652,846,528]:
+              - listitem [ref=e95] [box=425,652,846,96]:
+                - link [ref=e96] [cursor=pointer] [box=438,669,425,42]:
+                  - /url: https://www.coindesk.com/
+                  - text: Bitcoin holds steady as markets watch macro data
+                  - generic [ref=e97] [box=838,678,12,24]: ↗
+                - generic [ref=e99] [box=454,715,55,16]: CoinDesk
+              - listitem [ref=e100] [box=425,760,846,96]:
+                - link [ref=e101] [cursor=pointer] [box=438,777,492,42]:
+                  - /url: https://ethereum.org/
+                  - text: Ethereum developers discuss upcoming network upgrades
+                  - generic [ref=e102] [box=905,786,12,24]: ↗
+                - generic [ref=e104] [box=454,823,121,16]: Ethereum Foundation
+              - listitem [ref=e105] [box=425,868,846,96]:
+                - link [ref=e106] [cursor=pointer] [box=438,885,457,42]:
+                  - /url: https://solana.com/news
+                  - text: Solana ecosystem activity remains in focus for traders
+                  - generic [ref=e107] [box=870,894,12,24]: ↗
+                - generic [ref=e109] [box=454,931,38,16]: Solana
+              - listitem [ref=e110] [box=425,976,846,96]:
+                - link [ref=e111] [cursor=pointer] [box=438,993,435,42]:
+                  - /url: https://cardano.org/news/
+                  - text: Cardano community reviews governance proposals
+                  - generic [ref=e112] [box=848,1002,12,24]: ↗
+                - generic [ref=e114] [box=454,1039,48,16]: Cardano
+              - listitem [ref=e115] [box=425,1084,846,96]:
+                - link [ref=e116] [cursor=pointer] [box=438,1101,532,42]:
+                  - /url: https://www.coingecko.com/
+                  - text: "Crypto markets digest: volatility, regulation, and adoption trends"
+                  - generic [ref=e117] [box=945,1110,12,24]: ↗
+                - generic [ref=e119] [box=454,1147,62,16]: CoinGecko
+            - paragraph [ref=e121] [box=425,1213,846,16]: "Source: CCData CryptoCompare"
+          - list [ref=e123] [box=425,652,846,74]:
+            - listitem [ref=e124] [box=425,652,846,19]:
+              - generic [ref=e126] [box=439,652,332,19]: Bitcoin holds steady as markets watch macro data
+            - listitem [ref=e127] [box=425,680,846,19]:
+              - generic [ref=e129] [box=439,680,389,19]: Ethereum developers discuss upcoming network upgrades
+            - listitem [ref=e130] [box=425,707,846,19]:
+              - generic [ref=e132] [box=439,707,359,19]: Solana ecosystem activity remains in focus for traders
+        - group "Rate this content" [ref=e135] [box=425,767,846,28]:
+          - button "Helpful" [ref=e136] [cursor=pointer] [box=425,767,87,28]:
+            - img [ref=e137] [box=437,773,16,16]
+            - text: Helpful
+          - button "Not helpful" [ref=e139] [cursor=pointer] [box=520,767,109,28]:
+            - img [ref=e140] [box=532,773,16,16]
+            - text: Not helpful
+      - article [ref=e142] [box=400,844,896,243]:
+        - generic [ref=e143] [box=421,865,854,132]:
+          - button "4 Fun Crypto Meme Open full meme" [ref=e145] [cursor=pointer] [box=413,865,870,44]:
+            - generic [ref=e146] [box=421,869,36,36]: "4"
+            - img [ref=e148] [box=471,877,20,20]
+            - heading "Fun Crypto Meme" [level=2] [ref=e150] [box=505,875,726,24]
+            - button "Open full meme" [ref=e151] [box=1243,871,32,32]:
+              - img [ref=e152] [box=1249,877,20,20]
+          - generic [ref=e154] [box=421,925,854,405]:
+            - generic [ref=e156] [box=421,925,854,352]:
+              - img [ref=e158] [box=421,925,854,320]
+              - paragraph [ref=e159] [box=421,1257,854,20]: When you check your portfolio at 3 AM
+            - paragraph [ref=e161] [box=421,1310,854,16]: "Source: Curated fallback"
+          - paragraph [ref=e165] [box=509,951,258,20]: When you check your portfolio at 3 AM
+        - group "Rate this content" [ref=e168] [box=421,1038,854,28]:
+          - button "Helpful" [ref=e169] [cursor=pointer] [box=421,1038,87,28]:
+            - img [ref=e170] [box=433,1044,16,16]
+            - text: Helpful
+          - button "Not helpful" [ref=e172] [cursor=pointer] [box=516,1038,109,28]:
+            - img [ref=e173] [box=528,1044,16,16]
+            - text: Not helpful
+      - article [ref=e175] [box=400,1111,896,377]:
+        - generic [ref=e176] [box=425,1136,846,258]:
+          - button "3 Coin Prices Open full coin prices" [ref=e178] [cursor=pointer] [box=417,1136,862,44]:
+            - generic [ref=e179] [box=425,1140,36,36]: "3"
+            - img [ref=e181] [box=475,1148,20,20]
+            - heading "Coin Prices" [level=2] [ref=e183] [box=509,1144,718,28]
+            - button "Open full coin prices" [ref=e184] [box=1239,1142,32,32]:
+              - img [ref=e185] [box=1245,1148,20,20]
+          - generic [ref=e187] [box=425,1196,846,849]:
+            - generic [ref=e189] [box=425,1196,846,768]:
+              - generic [ref=e190] [box=425,1196,846,426]:
+                - generic [ref=e191] [box=425,1196,415,205]:
+                  - generic [ref=e192] [box=442,1213,381,48]:
+                    - generic [ref=e193] [box=442,1213,65,40]:
+                      - paragraph [ref=e194] [box=442,1213,65,24]: Cardano
+                      - paragraph [ref=e195] [box=442,1237,65,16]: cardano
+                    - generic [ref=e196] [box=725,1213,98,48]:
+                      - paragraph [ref=e197] [box=725,1213,98,28]: $0.173599
+                      - paragraph [ref=e198] [box=725,1241,98,20]: +1.05%
+                  - img [ref=e199] [box=442,1273,381,64]
+                  - paragraph [ref=e203] [box=442,1341,381,15]: 7d trend
+                  - paragraph [ref=e204] [box=442,1368,381,16]: "24h volume: $375.2M"
+                - generic [ref=e205] [box=856,1196,415,205]:
+                  - generic [ref=e206] [box=873,1213,381,48]:
+                    - generic [ref=e207] [box=873,1213,52,40]:
+                      - paragraph [ref=e208] [box=873,1213,52,24]: Solana
+                      - paragraph [ref=e209] [box=873,1237,52,16]: solana
+                    - generic [ref=e210] [box=1191,1213,63,48]:
+                      - paragraph [ref=e211] [box=1191,1213,63,28]: $68.15
+                      - paragraph [ref=e212] [box=1191,1241,63,20]: +0.92%
+                  - img [ref=e213] [box=873,1273,381,64]
+                  - paragraph [ref=e217] [box=873,1341,381,15]: 7d trend
+                  - paragraph [ref=e218] [box=873,1368,381,16]: "24h volume: $1.7B"
+                - generic [ref=e219] [box=425,1417,415,205]:
+                  - generic [ref=e220] [box=442,1434,381,48]:
+                    - generic [ref=e221] [box=442,1434,73,40]:
+                      - paragraph [ref=e222] [box=442,1434,73,24]: Ethereum
+                      - paragraph [ref=e223] [box=442,1458,73,16]: ethereum
+                    - generic [ref=e224] [box=732,1434,91,48]:
+                      - paragraph [ref=e225] [box=732,1434,91,28]: $1,676.89
+                      - paragraph [ref=e226] [box=732,1462,91,20]: +0.46%
+                  - img [ref=e227] [box=442,1494,381,64]
+                  - paragraph [ref=e231] [box=442,1562,381,15]: 7d trend
+                  - paragraph [ref=e232] [box=442,1589,381,16]: "24h volume: $6.5B"
+                - generic [ref=e233] [box=856,1417,415,205]:
+                  - generic [ref=e234] [box=873,1434,381,48]:
+                    - generic [ref=e235] [box=873,1434,52,40]:
+                      - paragraph [ref=e236] [box=873,1434,52,24]: Bitcoin
+                      - paragraph [ref=e237] [box=873,1458,52,16]: bitcoin
+                    - generic [ref=e238] [box=1151,1434,103,48]:
+                      - paragraph [ref=e239] [box=1151,1434,103,28]: $64,071.00
+                      - paragraph [ref=e240] [box=1151,1462,103,20]: +0.42%
+                  - img [ref=e241] [box=873,1494,381,64]
+                  - paragraph [ref=e245] [box=873,1562,381,15]: 7d trend
+                  - paragraph [ref=e246] [box=873,1589,381,16]: "24h volume: $18.2B"
+              - figure [ref=e248] [box=425,1671,846,293]:
+                - img [ref=e251] [box=624,1683,448,299]
+            - generic [ref=e252] [box=425,1980,846,61]:
+              - paragraph [ref=e253] [box=425,1997,846,16]: "Source: CoinGecko"
+              - generic [ref=e254] [box=425,2021,846,20]:
+                - generic [ref=e255] [box=425,2023,80,16]: "Related coins:"
+                - generic [ref=e256] [box=513,2021,69,20]: Cardano
+                - generic [ref=e257] [box=589,2021,59,20]: Solana
+                - generic [ref=e258] [box=656,2021,75,20]: Ethereum
+                - generic [ref=e259] [box=739,2021,59,20]: Bitcoin
+          - table "Coin prices for your tracked assets" [ref=e262] [box=426,1197,844,196]:
+            - caption [ref=e263] [box=425,1229,1,1]: Coin prices for your tracked assets
+            - rowgroup [ref=e264] [box=426,1197,844,33]:
+              - row "Coin Price 24h" [ref=e265] [box=426,1197,844,33]:
+                - columnheader "Coin" [ref=e266] [box=426,1197,392,33]
+                - columnheader "Price" [ref=e267] [box=818,1197,258,33]
+                - columnheader "24h" [ref=e268] [box=1076,1197,194,33]
+            - rowgroup [ref=e269] [box=426,1230,844,163]:
+              - row "Cardanocardano $0.173599 +1.05%" [ref=e270] [box=426,1230,844,41]:
+                - cell "Cardanocardano" [ref=e271] [box=426,1230,392,41]
+                - cell "$0.173599" [ref=e272] [box=818,1230,258,41]
+                - cell "+1.05%" [ref=e273] [box=1076,1230,194,41]
+              - row "Solanasolana $68.15 +0.92%" [ref=e274] [box=426,1271,844,41]:
+                - cell "Solanasolana" [ref=e275] [box=426,1271,392,41]
+                - cell "$68.15" [ref=e276] [box=818,1271,258,41]
+                - cell "+0.92%" [ref=e277] [box=1076,1271,194,41]
+              - row "Ethereumethereum $1,676.89 +0.46%" [ref=e278] [box=426,1312,844,41]:
+                - cell "Ethereumethereum" [ref=e279] [box=426,1312,392,41]
+                - cell "$1,676.89" [ref=e280] [box=818,1312,258,41]
+                - cell "+0.46%" [ref=e281] [box=1076,1312,194,41]
+              - row "Bitcoinbitcoin $64,071.00 +0.42%" [ref=e282] [box=426,1353,844,41]:
+                - cell "Bitcoinbitcoin" [ref=e283] [box=426,1353,392,41]
+                - cell "$64,071.00" [ref=e284] [box=818,1353,258,41]
+                - cell "+0.42%" [ref=e285] [box=1076,1353,194,41]
+        - group "Rate this content" [ref=e288] [box=425,1435,846,28]:
+          - button "Helpful" [ref=e289] [cursor=pointer] [box=425,1435,87,28]:
+            - img [ref=e290] [box=437,1441,16,16]
+            - text: Helpful
+          - button "Not helpful" [ref=e292] [cursor=pointer] [box=520,1435,109,28]:
+            - img [ref=e293] [box=532,1441,16,16]
+            - text: Not helpful

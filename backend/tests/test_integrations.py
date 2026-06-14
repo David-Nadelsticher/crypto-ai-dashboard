@@ -211,55 +211,45 @@ class TestFetchMarketNews:
 
 
 class TestFetchRedditMeme:
-    """Tests for Reddit meme fetching."""
+    """Tests for meme API fetching."""
 
     @pytest.mark.asyncio
     async def test_fetch_reddit_meme_success(self):
-        """Returns a parsed meme when Reddit responds with image posts."""
+        """Returns a parsed meme when meme-api responds successfully."""
         response = _make_response(
             json_data={
-                "data": {
-                    "children": [
-                        {
-                            "data": {
-                                "id": "abc123",
-                                "title": "HODL meme",
-                                "url": "https://i.redd.it/example.png",
-                                "permalink": "/r/CryptoCurrencyMemes/comments/abc123/hodl/",
-                            }
-                        }
-                    ]
-                }
+                "title": "HODL meme",
+                "url": "https://i.redd.it/example.png",
+                "postLink": (
+                    "https://www.reddit.com/r/CryptoCurrencyMemes/comments/"
+                    "abc123/hodl/"
+                ),
             },
-            url="https://www.reddit.com/r/CryptoCurrencyMemes/hot.json",
+            url="https://meme-api.com/gimme/CryptoCurrencyMemes",
         )
 
         with _mock_async_client_context(response):
-            with patch(
-                "app.services.external.integrations.random.choice",
-                side_effect=lambda items: items[0],
-            ):
-                result = await integrations.fetch_reddit_meme()
+            result = await integrations.fetch_reddit_meme()
 
-        assert result["id"] == "abc123"
+        assert result["id"] == "hodl"
         assert result["title"] == "HODL meme"
         assert result["image_url"] == "https://i.redd.it/example.png"
-        assert result["source"] == "reddit"
+        assert result["source"] == "meme-api"
         assert result["permalink"] == (
             "https://www.reddit.com/r/CryptoCurrencyMemes/comments/abc123/hodl/"
         )
 
     @pytest.mark.asyncio
     async def test_fetch_reddit_meme_http_error_returns_static_fallback(self):
-        """Returns static meme fallback when Reddit raises an HTTP error."""
+        """Returns static meme fallback when meme-api raises an HTTP error."""
         mock_client = AsyncMock()
         mock_client.get.side_effect = httpx.HTTPStatusError(
-            "Unauthorized",
+            "Service Unavailable",
             request=httpx.Request(
                 "GET",
-                "https://www.reddit.com/r/CryptoCurrencyMemes/hot.json",
+                "https://meme-api.com/gimme/CryptoCurrencyMemes",
             ),
-            response=httpx.Response(status_code=401),
+            response=httpx.Response(status_code=503),
         )
 
         mock_context = AsyncMock()

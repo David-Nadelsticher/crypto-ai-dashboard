@@ -1,7 +1,15 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { TOKEN_KEY } from "../api/client";
 import { fetchCurrentUser, login as loginRequest } from "../api/auth";
-import { AUTH_EXPIRED_EVENT } from "../utils/authEvents";
+import { AUTH_EXPIRED_EVENT, markVoluntaryLogout } from "../utils/authEvents";
 
 const USER_KEY = "user";
 
@@ -21,6 +29,7 @@ export function AuthProvider({ children }) {
   const [token, setToken] = useState(() => localStorage.getItem(TOKEN_KEY));
   const [user, setUser] = useState(() => readStoredUser());
   const [loading, setLoading] = useState(true);
+  const loginInProgressRef = useRef(false);
 
   const persistSession = useCallback((accessToken, userData) => {
     localStorage.setItem(TOKEN_KEY, accessToken);
@@ -54,6 +63,10 @@ export function AuthProvider({ children }) {
         return;
       }
 
+      if (loginInProgressRef.current) {
+        return;
+      }
+
       try {
         const userData = await fetchCurrentUser();
         if (!cancelled) {
@@ -79,9 +92,11 @@ export function AuthProvider({ children }) {
 
   const login = useCallback(
     async (email, password) => {
-      const { access_token } = await loginRequest({ email, password });
+      loginInProgressRef.current = true;
+      setLoading(true);
 
       try {
+        const { access_token } = await loginRequest({ email, password });
         localStorage.setItem(TOKEN_KEY, access_token);
         setToken(access_token);
 
@@ -91,12 +106,16 @@ export function AuthProvider({ children }) {
       } catch (error) {
         clearSession();
         throw error;
+      } finally {
+        loginInProgressRef.current = false;
+        setLoading(false);
       }
     },
     [persistSession, clearSession],
   );
 
   const logout = useCallback(() => {
+    markVoluntaryLogout();
     clearSession();
   }, [clearSession]);
 

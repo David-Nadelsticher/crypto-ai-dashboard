@@ -1,6 +1,7 @@
 import SectionCard from "../features/dashboard/SectionCard";
 import SectionContent from "../features/dashboard/SectionContent";
 import ExternalLink from "../ui/ExternalLink";
+import Kicker from "../ui/Kicker";
 import { NewsIcon } from "../icons/SectionIcons";
 import { formatTimestamp } from "../../utils/format";
 import { buildNewsSnapshot } from "../../utils/voteSnapshots";
@@ -17,11 +18,11 @@ function NewsEditorialLabel({ count }) {
   if (count === 0) return null;
 
   return (
-    <p className="section-preview-kicker mb-3">
+    <Kicker as="p" className="mb-3">
       Piggy selected{" "}
       <span className="section-preview-kicker-accent">{count}</span>{" "}
       {count === 1 ? "story" : "stories"} for you.
-    </p>
+    </Kicker>
   );
 }
 

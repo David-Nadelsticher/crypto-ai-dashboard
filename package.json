@@ -1,0 +1,23 @@
+{
+  "name": "crypto-ai-dashboard",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/David-Nadelsticher/crypto-ai-dashboard.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/David-Nadelsticher/crypto-ai-dashboard/issues"
+  },
+  "homepage": "https://github.com/David-Nadelsticher/crypto-ai-dashboard#readme",
+  "devDependencies": {
+
+    "@upstash/context7-mcp": "^3.2.0"
+  }
+}

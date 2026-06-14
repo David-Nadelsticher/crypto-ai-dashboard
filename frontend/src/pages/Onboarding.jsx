@@ -6,6 +6,7 @@ import PreferencesFields from "../components/features/preferences/PreferencesFie
 import Alert from "../components/ui/Alert";
 import Button from "../components/ui/Button";
 import OnboardingProgress from "../components/ui/OnboardingProgress";
+import Overlay from "../components/ui/Overlay";
 import PiggyAvatar from "../components/brand/PiggyAvatar";
 import { useAuth } from "../context/AuthContext";
 import usePreferencesForm from "../hooks/usePreferencesForm";
@@ -25,6 +26,11 @@ const VALIDATION_STEP = {
   assets: 1,
   investorType: 2,
   contentTypes: 3,
+};
+
+const ONBOARDING_SCROLL_SPY_OPTIONS = {
+  rootMargin: "-20% 0px -55% 0px",
+  threshold: [0, 0.25, 0.5],
 };
 
 export default function Onboarding() {
@@ -77,10 +83,7 @@ export default function Onboarding() {
     };
   }, []);
 
-  const activeSectionId = useScrollSpy(ONBOARDING_STEP_IDS, {
-    rootMargin: "-20% 0px -55% 0px",
-    threshold: [0, 0.25, 0.5],
-  });
+  const activeSectionId = useScrollSpy(ONBOARDING_STEP_IDS, ONBOARDING_SCROLL_SPY_OPTIONS);
 
   const stepCompletion = getOnboardingStepCompletion({
     assets,
@@ -93,27 +96,21 @@ export default function Onboarding() {
 
   return (
     <>
-      {showSuccess && (
-        <div
-          className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-piggy-card/95 px-6 motion-fade-in motion-reduce:animate-none"
-          role="status"
-          aria-live="polite"
+      <Overlay open={showSuccess} variant="fullscreen">
+        <PiggyAvatar size="lg" className="motion-scale-in motion-reduce:animate-none" />
+        <p
+          className="mt-4 text-center font-heading text-xl font-semibold text-piggy-charcoal motion-slide-up motion-reduce:animate-none"
+          style={{ "--motion-delay": "80ms" }}
         >
-          <PiggyAvatar size="lg" className="motion-scale-in motion-reduce:animate-none" />
-          <p
-            className="mt-4 text-center font-heading text-xl font-semibold text-piggy-charcoal motion-slide-up motion-reduce:animate-none"
-            style={{ "--motion-delay": "80ms" }}
-          >
-            Piggy has your brief ready
-          </p>
-          <p
-            className="mt-2 text-sm text-piggy-gray motion-slide-up motion-reduce:animate-none"
-            style={{ "--motion-delay": "140ms" }}
-          >
-            Opening today&apos;s brief…
-          </p>
-        </div>
-      )}
+          Piggy has your brief ready
+        </p>
+        <p
+          className="mt-2 text-sm text-piggy-gray motion-slide-up motion-reduce:animate-none"
+          style={{ "--motion-delay": "140ms" }}
+        >
+          Opening today&apos;s brief…
+        </p>
+      </Overlay>
 
       <OnboardingLayout
         overline={`Welcome${user?.name ? `, ${user.name}` : ""}`}

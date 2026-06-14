@@ -1,3 +1,5 @@
+import Kicker from "./Kicker";
+
 export default function FormSectionCard({
   id,
   title,
@@ -15,7 +17,7 @@ export default function FormSectionCard({
 
   return (
     <section id={id} className={cardClassName}>
-      {kicker && <p className="section-preview-kicker">{kicker}</p>}
+      {kicker && <Kicker>{kicker}</Kicker>}
       <h2
         className={`font-heading text-lg font-semibold text-piggy-charcoal ${kicker ? "mt-1" : ""}`}
       >

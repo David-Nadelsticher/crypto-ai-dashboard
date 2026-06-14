@@ -2,6 +2,15 @@ import { resolveFocusAssets } from "../config/cryptoAssets.js";
 
 export const EMPTY_INSIGHT_MESSAGE = "Piggy is still reviewing the market.";
 
+export function buildSourceLabel(insight) {
+  if (!insight) return null;
+  if (insight.source === "openrouter" && insight.model) {
+    return `OpenRouter (${insight.model})`;
+  }
+  if (insight.source === "simulated") return "Simulated insight";
+  return insight.source || null;
+}
+
 export function extractPiggyTake(text) {
   if (!text) return EMPTY_INSIGHT_MESSAGE;
   const trimmed = text.trim();

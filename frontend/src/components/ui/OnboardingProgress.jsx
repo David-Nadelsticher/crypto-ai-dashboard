@@ -1,4 +1,6 @@
 import { ONBOARDING_STEPS } from "../../utils/onboardingSteps";
+import Badge from "./Badge";
+import Kicker from "./Kicker";
 
 export default function OnboardingProgress({ summary }) {
   const { completedCount, totalSteps, status } = summary;
@@ -15,10 +17,10 @@ export default function OnboardingProgress({ summary }) {
       aria-label={`Setup progress: ${completedCount} of ${totalSteps} steps saved`}
     >
       <div className="mb-3 flex items-center justify-between gap-3">
-        <p className="section-preview-kicker">Setup progress</p>
-        <p className="shrink-0 rounded-full bg-piggy-cream px-2.5 py-1 text-xs font-semibold text-piggy-charcoal ring-1 ring-piggy-border">
+        <Kicker>Setup progress</Kicker>
+        <Badge variant="cream" size="sm" className="shrink-0 ring-1 ring-piggy-border">
           {completedCount}/{totalSteps} saved
-        </p>
+        </Badge>
       </div>
 
       <div className="flex gap-2" role="presentation" aria-hidden="true">

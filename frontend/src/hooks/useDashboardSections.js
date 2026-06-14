@@ -1,7 +1,9 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { DASHBOARD_SECTIONS } from "../config/dashboardSections";
 import { orderDashboardSections } from "../config/personalization";
 import { scrollToSectionContent } from "../utils/scrollToSectionContent";
+
+const EMPTY_CONTENT_TYPES = [];
 
 export default function useDashboardSections(user, dashboardData) {
   const {
@@ -19,8 +21,11 @@ export default function useDashboardSections(user, dashboardData) {
   const scrollTimeoutRef = useRef(undefined);
 
   const relatedCoins = user?.preferences?.assets || [];
-  const contentTypes = user?.preferences?.content_types || [];
-  const orderedSections = orderDashboardSections(DASHBOARD_SECTIONS, contentTypes);
+  const contentTypes = user?.preferences?.content_types ?? EMPTY_CONTENT_TYPES;
+  const orderedSections = useMemo(
+    () => orderDashboardSections(DASHBOARD_SECTIONS, contentTypes),
+    [contentTypes],
+  );
 
   const handleSectionExpandedChange = useCallback((sectionId, nextExpanded) => {
     if (scrollTimeoutRef.current) {

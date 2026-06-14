@@ -1,11 +1,7 @@
-const VARIANT_STYLES = {
-  error: "border-piggy-negative/30 bg-piggy-negative/5 text-piggy-negative",
-  success: "border-piggy-positive/30 bg-piggy-positive/5 text-piggy-positive",
-  info: "border-piggy-border bg-piggy-cream/50 text-piggy-gray",
-};
+import { STATUS_SURFACE_STYLES } from "../../utils/statusVariants";
 
 export default function Alert({ variant = "error", children }) {
-  const styles = VARIANT_STYLES[variant] || VARIANT_STYLES.error;
+  const styles = STATUS_SURFACE_STYLES[variant] || STATUS_SURFACE_STYLES.error;
 
   return (
     <div

@@ -1,5 +1,4 @@
 import logging
-import random
 import ssl
 from typing import Any
 
@@ -11,8 +10,6 @@ from app.core.config import settings
 logger = logging.getLogger(__name__)
 
 REQUEST_TIMEOUT = 15.0
-USER_AGENT = "crypto-ai-dashboard/1.0 (home-assignment)"
-
 
 def _build_ssl_verify() -> bool | str | ssl.SSLContext:
     try:
@@ -269,99 +266,60 @@ async def fetch_market_news() -> list[dict[str, Any]]:
     return results
 
 
-def _is_image_post(post_data: dict[str, Any]) -> bool:
-    url = (post_data.get("url") or "").lower()
-    if url.endswith(".jpg") or url.endswith(".png"):
-        return True
-
-    preview_images = post_data.get("preview", {}).get("images", [])
-    return bool(preview_images)
-
-
-def _extract_image_url(post_data: dict[str, Any]) -> str | None:
-    url = post_data.get("url") or ""
-    if url.lower().endswith((".jpg", ".png")):
-        return url
-
-    preview_images = post_data.get("preview", {}).get("images", [])
-    if preview_images:
-        source_url = preview_images[0].get("source", {}).get("url", "")
-        return source_url.replace("&amp;", "&") if source_url else None
-
-    return None
-
-
 async def fetch_reddit_meme() -> dict[str, Any]:
-    headers = {"User-Agent": USER_AGENT}
-    reddit_url = "https://www.reddit.com/r/CryptoCurrencyMemes/hot.json"
-    reddit_params = {"limit": 50}
+    meme_api_url = "https://meme-api.com/gimme/CryptoCurrencyMemes"
 
     try:
-        logger.debug(
-            "Reddit meme request starting: url=%s params=%s",
-            reddit_url,
-            reddit_params,
-        )
-        async with _build_http_client(headers=headers) as client:
-            response = await client.get(
-                reddit_url,
-                params=reddit_params,
-            )
+        logger.debug("Meme API request starting: url=%s", meme_api_url)
+        async with _build_http_client() as client:
+            response = await client.get(meme_api_url)
             response.raise_for_status()
             payload = response.json()
         logger.debug(
-            "Reddit meme request succeeded: status_code=%s post_count=%s",
+            "Meme API request succeeded: status_code=%s title=%s",
             response.status_code,
-            len(payload.get("data", {}).get("children", [])),
+            payload.get("title"),
         )
     except EXTERNAL_REQUEST_ERRORS as exc:
-        logger.warning("Reddit meme request failed: %s", exc)
+        logger.warning("Meme API request failed: %s", exc)
         return STATIC_MEME_FALLBACK
 
-    image_posts: list[dict[str, Any]] = []
-    for child in payload.get("data", {}).get("children", []):
-        post_data = child.get("data", {})
-        if not _is_image_post(post_data):
-            continue
-
-        image_url = _extract_image_url(post_data)
-        if not image_url:
-            continue
-
-        image_posts.append(
-            {
-                "id": post_data.get("id"),
-                "title": post_data.get("title") or "Crypto meme",
-                "image_url": image_url,
-                "permalink": f"https://www.reddit.com{post_data.get('permalink', '')}",
-                "source": "reddit",
-            }
-        )
-
-    if not image_posts:
-        logger.info("No suitable Reddit image posts found. Using static meme fallback.")
+    image_url = payload.get("url")
+    if not image_url:
+        logger.info("Meme API returned no image URL. Using static meme fallback.")
         return STATIC_MEME_FALLBACK
 
-    selected_meme = random.choice(image_posts)
-    logger.debug("Reddit meme selected: id=%s", selected_meme.get("id"))
+    post_link = payload.get("postLink") or ""
+    path_parts = [part for part in post_link.rstrip("/").split("/") if part]
+    meme_id = path_parts[-1] if path_parts else "fallback-meme"
+    selected_meme = {
+        "id": meme_id,
+        "title": payload.get("title") or "Crypto meme",
+        "image_url": image_url,
+        "permalink": post_link or None,
+        "source": "meme-api",
+    }
+    logger.debug("Meme API meme selected: id=%s", selected_meme.get("id"))
     return selected_meme
 
 
 async def generate_ai_insight(
-    investor_type: str | None,
-    assets: list[str],
-    content_types: list[str] | None = None,
+        investor_type: str | None,
+        assets: list[str],
+        content_types: list[str] | None = None,
 ) -> dict[str, Any]:
     model = settings.OPENROUTER_MODEL
 
     asset_text = ", ".join(assets) if assets else "major cryptocurrencies"
     profile = investor_type or "crypto investor"
     content_text = ", ".join(content_types) if content_types else "general market updates"
+
+    # User prompt - contains only the dynamic data and a call to action
     prompt = (
-        f"Write a concise daily crypto market insight in at most 3 sentences for a "
-        f"{profile} focused on {asset_text}. The user prefers content types such as "
-        f"{content_text}, so reflect that focus where relevant. Keep it educational, "
-        "avoid financial advice, and mention sentiment and risk awareness."
+        f"Assets to analyze: {asset_text}.\n"
+        f"Target audience: {profile}.\n"
+        f"Preferred focus areas: {content_text}.\n"
+        "Provide your 3-sentence insight now."
     )
 
     if not settings.OPENROUTER_API_KEY:
@@ -378,20 +336,24 @@ async def generate_ai_insight(
         "HTTP-Referer": settings.OPENROUTER_SITE_URL,
         "X-Title": settings.OPENROUTER_APP_NAME,
     }
+
+    # System prompt - contains the strict rules, persona, and formatting constraints
+    system_content = (
+        "You are a professional crypto financial analyst providing educational daily insights. "
+        "You must respond strictly with exactly 3 sentences.\n"
+        "Sentence 1: Provide the definitive bottom-line market sentiment (Bullish/Bearish/Neutral) for the requested assets.\n"
+        "Sentences 2 and 3: Provide concise justification, touching on trends, focus areas, and risk awareness.\n"
+        "Do not provide direct financial advice. Do not include any introductory filler or conversational text."
+    )
+
     body = {
         "model": model,
         "messages": [
-            {
-                "role": "system",
-                "content": (
-                    "You are a helpful crypto market commentator. "
-                    "Provide brief educational insights only."
-                ),
-            },
+            {"role": "system", "content": system_content},
             {"role": "user", "content": prompt},
         ],
-        "max_tokens": 180,
-        "temperature": 0.7,
+        "max_tokens": 150,  # Lowered slightly to strictly enforce the 3-sentence limit
+        "temperature": 0.5,  # Lowered temperature for more deterministic and structured outputs
     }
 
     try:
