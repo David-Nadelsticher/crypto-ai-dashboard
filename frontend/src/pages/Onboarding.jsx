@@ -1,18 +1,62 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { submitOnboarding } from "../api/auth";
+import OnboardingLayout from "../components/OnboardingLayout";
+import Alert from "../components/ui/Alert";
+import Button from "../components/ui/Button";
+import CheckboxCard from "../components/ui/CheckboxCard";
+import OnboardingProgress from "../components/ui/OnboardingProgress";
+import PiggyAvatar from "../components/ui/PiggyAvatar";
+import RadioCard from "../components/ui/RadioCard";
 import { useAuth } from "../context/AuthContext";
+import usePrefersReducedMotion from "../hooks/usePrefersReducedMotion";
+import { useScrollSpy } from "../hooks/useScrollSpy";
 import { getApiErrorMessage } from "../utils/apiError";
+import {
+  getFocusedStep,
+  getFirstIncompleteStep,
+  getOnboardingStepCompletion,
+  getProgressSummary,
+  ONBOARDING_STEP_IDS,
+  ONBOARDING_STEPS,
+  scrollToOnboardingStep,
+} from "../utils/onboardingSteps";
 
 const ASSET_OPTIONS = ["Bitcoin", "Ethereum", "Solana", "Cardano"];
-const INVESTOR_TYPES = ["Day Trader", "HODLer", "Crypto Whale", "NFT Collector"];
-const CONTENT_TYPES = ["Market News", "Technical Analysis", "Memes & Fun"];
+const INVESTOR_TYPES = ["Day Trader", "HODLer", "NFT Collector"];
+const CONTENT_TYPES = ["Market News", "Charts", "Social", "Fun"];
 
-function SelectionCard({ title, description, children }) {
+function SelectionCard({
+  step,
+  stepLabel,
+  title,
+  description,
+  isBlockedAhead,
+  children,
+}) {
   return (
-    <section className="rounded-xl border border-slate-800 bg-slate-900/60 p-6">
-      <h2 className="text-lg font-semibold text-white">{title}</h2>
-      {description && <p className="mt-1 text-sm text-slate-400">{description}</p>}
+    <section
+      id={ONBOARDING_STEP_IDS[step - 1]}
+      className="scroll-mt-8 rounded-xl border border-piggy-border bg-piggy-card p-6 shadow-card"
+    >
+      <p className="section-preview-kicker">
+        Step {step}
+        <span className="section-preview-kicker-accent"> · {stepLabel}</span>
+      </p>
+      <h2 className="mt-1 font-heading text-lg font-semibold text-piggy-charcoal">
+        {title}
+        <span className="text-piggy-pink" aria-hidden="true">
+          {" "}
+          *
+        </span>
+        <span className="sr-only"> (required)</span>
+      </h2>
+      {description && <p className="mt-1 text-sm text-piggy-gray">{description}</p>}
+      {isBlockedAhead && (
+        <p className="mt-2 text-sm text-piggy-gray">
+          Complete the earlier step{step > 2 ? "s" : ""} above before finishing here.
+        </p>
+      )}
       <div className="mt-4">{children}</div>
     </section>
   );
@@ -21,12 +65,38 @@ function SelectionCard({ title, description, children }) {
 export default function Onboarding() {
   const navigate = useNavigate();
   const { user, updateUser } = useAuth();
+  const prefersReducedMotion = usePrefersReducedMotion();
 
   const [assets, setAssets] = useState([]);
   const [investorType, setInvestorType] = useState("");
   const [contentTypes, setContentTypes] = useState([]);
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const navigateTimeoutRef = useRef(null);
+
+  useEffect(() => {
+    return () => {
+      if (navigateTimeoutRef.current) {
+        window.clearTimeout(navigateTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  const activeSectionId = useScrollSpy(ONBOARDING_STEP_IDS, {
+    rootMargin: "-20% 0px -55% 0px",
+    threshold: [0, 0.25, 0.5],
+  });
+
+  const stepCompletion = getOnboardingStepCompletion({
+    assets,
+    investorType,
+    contentTypes,
+  });
+  const focusedStep = getFocusedStep(activeSectionId);
+  const firstIncompleteStep = getFirstIncompleteStep(stepCompletion);
+  const progressSummary = getProgressSummary(focusedStep, stepCompletion);
+  const isOnboardingComplete = stepCompletion.every(Boolean);
 
   function toggleItem(list, setList, value) {
     setList((prev) =>
@@ -39,15 +109,18 @@ export default function Onboarding() {
     setError("");
 
     if (assets.length === 0) {
-      setError("Select at least one crypto asset.");
+      setError("Pick at least one asset for Piggy to monitor.");
+      scrollToOnboardingStep(1);
       return;
     }
     if (!investorType) {
-      setError("Select your investor type.");
+      setError("Select the investor profile that fits you best.");
+      scrollToOnboardingStep(2);
       return;
     }
     if (contentTypes.length === 0) {
-      setError("Select at least one content preference.");
+      setError("Pick at least one content type for your daily brief.");
+      scrollToOnboardingStep(3);
       return;
     }
 
@@ -59,7 +132,14 @@ export default function Onboarding() {
         content_types: contentTypes,
       });
       updateUser(updatedUser);
-      navigate("/dashboard", { replace: true });
+      if (prefersReducedMotion) {
+        navigate("/dashboard", { replace: true });
+        return;
+      }
+      setShowSuccess(true);
+      navigateTimeoutRef.current = window.setTimeout(() => {
+        navigate("/dashboard", { replace: true });
+      }, 400);
     } catch (err) {
       setError(getApiErrorMessage(err, "Unable to save your preferences."));
     } finally {
@@ -68,115 +148,119 @@ export default function Onboarding() {
   }
 
   return (
-    <div className="mx-auto min-h-screen max-w-3xl px-4 py-12">
-      <div className="mb-8 text-center">
-        <p className="text-sm font-medium uppercase tracking-wider text-indigo-400">
-          Welcome{user?.name ? `, ${user.name}` : ""}
-        </p>
-        <h1 className="mt-2 text-3xl font-bold text-white">Personalize your dashboard</h1>
-        <p className="mt-2 text-slate-400">
-          Tell us what you care about so we can tailor your daily crypto feed.
-        </p>
-      </div>
-
-      <form onSubmit={handleSubmit} className="space-y-6">
-        {error && (
-          <div
-            role="alert"
-            className="rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-300"
+    <>
+      {showSuccess && (
+        <div
+          className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-piggy-card/95 px-6 motion-fade-in motion-reduce:animate-none"
+          role="status"
+          aria-live="polite"
+        >
+          <PiggyAvatar size="lg" className="motion-scale-in motion-reduce:animate-none" />
+          <p
+            className="mt-4 text-center font-heading text-xl font-semibold text-piggy-charcoal motion-slide-up motion-reduce:animate-none"
+            style={{ "--motion-delay": "80ms" }}
           >
-            {error}
-          </div>
-        )}
+            Piggy has your brief ready
+          </p>
+          <p
+            className="mt-2 text-sm text-piggy-gray motion-slide-up motion-reduce:animate-none"
+            style={{ "--motion-delay": "140ms" }}
+          >
+            Opening today&apos;s brief…
+          </p>
+        </div>
+      )}
+
+      <OnboardingLayout
+      overline={`Welcome${user?.name ? `, ${user.name}` : ""}`}
+      title="Personalize your dashboard"
+      intro="Just before jumping into the water"
+      subtitle="Tell Piggy what to watch so your daily brief is tailored to you."
+    >
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <OnboardingProgress summary={progressSummary} />
+
+        {error && <Alert variant="error">{error}</Alert>}
 
         <SelectionCard
-          title="Favorite crypto assets"
-          description="Which coins do you want to track?"
+          step={1}
+          stepLabel={ONBOARDING_STEPS[0].label}
+          title="Which assets should Piggy keep an eye on for you?"
+          description="Pick the coins you want in your daily brief."
+          isBlockedAhead={false}
         >
           <div className="grid gap-3 sm:grid-cols-2">
             {ASSET_OPTIONS.map((asset) => (
-              <label
+              <CheckboxCard
                 key={asset}
-                className={`flex cursor-pointer items-center gap-3 rounded-lg border px-4 py-3 transition ${
-                  assets.includes(asset)
-                    ? "border-indigo-500 bg-indigo-500/10"
-                    : "border-slate-700 hover:border-slate-600"
-                }`}
-              >
-                <input
-                  type="checkbox"
-                  checked={assets.includes(asset)}
-                  onChange={() => toggleItem(assets, setAssets, asset)}
-                  className="h-4 w-4 rounded border-slate-600 bg-slate-950 text-indigo-500 focus:ring-indigo-500"
-                />
-                <span className="text-sm font-medium text-slate-200">{asset}</span>
-              </label>
+                id={`asset-${asset}`}
+                name="assets"
+                label={asset}
+                checked={assets.includes(asset)}
+                onChange={() => toggleItem(assets, setAssets, asset)}
+              />
             ))}
           </div>
         </SelectionCard>
 
         <SelectionCard
-          title="Investor type"
-          description="How do you approach the crypto market?"
+          step={2}
+          stepLabel={ONBOARDING_STEPS[1].label}
+          title="Which investor profile sounds most like you?"
+          description="This helps Piggy tailor tone and focus."
+          isBlockedAhead={focusedStep === 2 && firstIncompleteStep === 1}
         >
           <div className="grid gap-3 sm:grid-cols-2">
             {INVESTOR_TYPES.map((type) => (
-              <label
+              <RadioCard
                 key={type}
-                className={`flex cursor-pointer items-center gap-3 rounded-lg border px-4 py-3 transition ${
-                  investorType === type
-                    ? "border-indigo-500 bg-indigo-500/10"
-                    : "border-slate-700 hover:border-slate-600"
-                }`}
-              >
-                <input
-                  type="radio"
-                  name="investor_type"
-                  value={type}
-                  checked={investorType === type}
-                  onChange={(event) => setInvestorType(event.target.value)}
-                  className="h-4 w-4 border-slate-600 bg-slate-950 text-indigo-500 focus:ring-indigo-500"
-                />
-                <span className="text-sm font-medium text-slate-200">{type}</span>
-              </label>
+                id={`investor-${type}`}
+                name="investor_type"
+                value={type}
+                label={type}
+                checked={investorType === type}
+                onChange={(event) => setInvestorType(event.target.value)}
+              />
             ))}
           </div>
         </SelectionCard>
 
         <SelectionCard
-          title="Content preferences"
-          description="What kind of content should we prioritize?"
+          step={3}
+          stepLabel={ONBOARDING_STEPS[2].label}
+          title="What should Piggy focus on in your daily brief?"
+          description="Choose the content types that matter most to you."
+          isBlockedAhead={
+            focusedStep === 3 && firstIncompleteStep !== null && firstIncompleteStep < 3
+          }
         >
           <div className="grid gap-3 sm:grid-cols-2">
             {CONTENT_TYPES.map((type) => (
-              <label
+              <CheckboxCard
                 key={type}
-                className={`flex cursor-pointer items-center gap-3 rounded-lg border px-4 py-3 transition ${
-                  contentTypes.includes(type)
-                    ? "border-indigo-500 bg-indigo-500/10"
-                    : "border-slate-700 hover:border-slate-600"
-                }`}
-              >
-                <input
-                  type="checkbox"
-                  checked={contentTypes.includes(type)}
-                  onChange={() => toggleItem(contentTypes, setContentTypes, type)}
-                  className="h-4 w-4 rounded border-slate-600 bg-slate-950 text-indigo-500 focus:ring-indigo-500"
-                />
-                <span className="text-sm font-medium text-slate-200">{type}</span>
-              </label>
+                id={`content-${type}`}
+                name="content_types"
+                label={type}
+                checked={contentTypes.includes(type)}
+                onChange={() => toggleItem(contentTypes, setContentTypes, type)}
+              />
             ))}
           </div>
         </SelectionCard>
 
-        <button
+        <Button
           type="submit"
-          disabled={submitting}
-          className="w-full rounded-lg bg-indigo-500 px-4 py-3 font-semibold text-white transition hover:bg-indigo-400 disabled:cursor-not-allowed disabled:opacity-60"
+          variant="primary"
+          size="lg"
+          fullWidth
+          className="btn-onboarding-submit"
+          disabled={!isOnboardingComplete || submitting}
+          aria-disabled={!isOnboardingComplete || submitting}
         >
           {submitting ? "Saving preferences..." : "Continue to dashboard"}
-        </button>
+        </Button>
       </form>
-    </div>
+    </OnboardingLayout>
+    </>
   );
 }
