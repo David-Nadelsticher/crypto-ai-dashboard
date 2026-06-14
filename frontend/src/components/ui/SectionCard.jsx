@@ -1,4 +1,5 @@
 import { useId, useState } from "react";
+import FeedbackControls from "./FeedbackControls";
 import ContentSkeleton from "./ContentSkeleton";
 import StateMessage from "./StateMessage";
 
@@ -240,6 +241,14 @@ export default function SectionCard({
                 <div className="flex-1">{expandedContent}</div>
 
                 <SectionMetaDetails sourceLabel={sourceLabel} relatedCoins={relatedCoins} />
+
+                <div className="mt-6 border-t border-piggy-border pt-4">
+                  <FeedbackControls
+                    sectionName={sectionName}
+                    itemReference={isLoading ? "" : itemReference}
+                    contentSnapshot={isLoading ? null : contentSnapshot}
+                  />
+                </div>
               </div>
             </div>
           </div>
