@@ -16,6 +16,8 @@ import Login from "./pages/Login";
 
 import Onboarding from "./pages/Onboarding";
 
+import Settings from "./pages/Settings";
+
 import Signup from "./pages/Signup";
 
 export default function App() {
@@ -37,6 +39,7 @@ export default function App() {
 
           <Route element={<RequireAuth requireOnboarding />}>
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/settings" element={<Settings />} />
           </Route>
 
           <Route path="*" element={<NotFoundRedirect />} />
