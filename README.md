@@ -5,7 +5,7 @@
 <h1 align="center">Piggy Daily — AI Crypto Advisor</h1>
 
 <p align="center">
-  <strong>A personalized daily crypto brief — built for clarity, not chaos.</strong><br/>
+  <strong>A personalized daily crypto brief.</strong><br/>
   Full-Stack Web Assignment · React · FastAPI · MongoDB
 </p>
 
@@ -42,9 +42,6 @@ flowchart TD
   Dashboard --> Feedback["Thumbs up / down\nper section"]
   Feedback --> Dashboard
 ```
-
-Returning users skip onboarding and go straight to the dashboard. Preferences can be updated at any time in Settings.
-
 ---
 
 ## Live Demo
@@ -313,7 +310,7 @@ crypto-ai-dashboard/
 │   │   └── config/           # App config
 │   └── package.json
 ├── docs/                     # README assets and reports
-└── scripts/                  # Playwright screenshot script
+
 ```
 
 ---
