@@ -66,11 +66,6 @@ All screens captured at 1280×800.
 
 Clean auth layout with session-expiry handling.
 
-### Sign Up
-
-<p align="center">
-  <img src="docs/readme-screenshots/signup.png" alt="Sign up page" width="800" />
-</p>
 
 Creates user account and redirects to login on success. Minimum 8 characters for passwords.
 
