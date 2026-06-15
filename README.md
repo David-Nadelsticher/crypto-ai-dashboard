@@ -10,7 +10,6 @@
 </p>
 
 <p align="center">
-  <a href="#live-demo">Live Demo</a> ·
   <a href="#the-idea">The Idea</a> ·
   <a href="#screenshots">Screenshots</a> ·
   <a href="#getting-started">Getting Started</a> ·
@@ -42,15 +41,8 @@ flowchart TD
   Dashboard --> Feedback["Thumbs up / down\nper section"]
   Feedback --> Dashboard
 ```
+
 ---
-
-## Live Demo
-
-| Service                  | URL                                                          |
-| ------------------------ | ------------------------------------------------------------ |
-| **Frontend (Vercel)**    | `https://YOUR-APP.vercel.app` _(set in Vercel after deploy)_ |
-| **Backend API (Render)** | `https://crypto-ai-dashboard-1f6g.onrender.com`              |
-| **API Docs (Swagger)**   | `https://crypto-ai-dashboard-1f6g.onrender.com/docs`         |
 
 ---
 
@@ -65,7 +57,6 @@ All screens captured at 1280×800.
 </p>
 
 Clean auth layout with session-expiry handling.
-
 
 Creates user account and redirects to login on success. Minimum 8 characters for passwords.
 
