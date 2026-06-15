@@ -1,6 +1,7 @@
 import asyncio
 from datetime import datetime, timezone
 
+import certifi
 from motor.motor_asyncio import AsyncIOMotorClient
 
 from app.core.config import settings
@@ -9,7 +10,10 @@ from app.core.security import hash_password
 
 async def seed_database():
     print("Connecting to MongoDB Atlas...")
-    client = AsyncIOMotorClient(settings.MONGODB_URI)
+    client = AsyncIOMotorClient(
+        settings.MONGODB_URI,
+        tlsCAFile=certifi.where(),
+    )
     db = client[settings.MONGODB_DB_NAME]
     users_collection = db.users
 

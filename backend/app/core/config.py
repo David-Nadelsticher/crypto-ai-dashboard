@@ -25,6 +25,15 @@ class Settings(BaseSettings):
     OPENROUTER_APP_NAME: str = "Crypto AI Dashboard"
     SEED_TEST_EMAIL: str = "test@example.com"
     SEED_TEST_PASSWORD: str = "password123"
+    CORS_ORIGINS: str = "http://localhost:5173,http://127.0.0.1:5173"
+
+    @property
+    def cors_origins_list(self) -> list[str]:
+        return [
+            origin.strip()
+            for origin in self.CORS_ORIGINS.split(",")
+            if origin.strip()
+        ]
 
     @field_validator("JWT_SECRET_KEY")
     @classmethod

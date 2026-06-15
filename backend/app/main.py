@@ -7,6 +7,7 @@ from slowapi.errors import RateLimitExceeded
 from slowapi.middleware import SlowAPIMiddleware
 
 from app.api.routes import auth, dashboard, users, votes
+from app.core.config import settings
 from app.core.limiter import limiter
 from app.db.database import close_db, init_db
 
@@ -24,15 +25,8 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 app.add_middleware(SlowAPIMiddleware)
 app.add_middleware(
-    CORSMiddleware, allow_origins=[
-        "http://localhost:5173",
-        "http://127.0.0.1:5173",
-        "http://localhost:3000",
-        "http://127.0.0.1:3000"
-
-        # "https://your-project-name.vercel.app"
-    ],
-    # allow_origin_regex=r"https?://(localhost|127\.0\.0\.1)(:\d+)?",
+    CORSMiddleware,
+    allow_origins=settings.cors_origins_list,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

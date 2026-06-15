@@ -66,9 +66,9 @@ Returning users skip onboarding and land directly on the dashboard. Preferences 
 
 | Service | URL |
 |---------|-----|
-| **Frontend (Vercel)** | `https://your-app.vercel.app` *(replace before submission)* |
-| **Backend API (Render)** | `https://your-api.onrender.com` *(replace before submission)* |
-| **API Docs (Swagger)** | `https://your-api.onrender.com/docs` |
+| **Frontend (Vercel)** | `https://YOUR-APP.vercel.app` *(set in Vercel after deploy)* |
+| **Backend API (Render)** | `https://crypto-ai-dashboard-1f6g.onrender.com` |
+| **API Docs (Swagger)** | `https://crypto-ai-dashboard-1f6g.onrender.com/docs` |
 
 ---
 
@@ -354,12 +354,42 @@ Copy from [`backend/.env.example`](backend/.env.example):
 | `OPENROUTER_APP_NAME` | No | Application name sent to OpenRouter |
 | `SEED_TEST_EMAIL` | No | Email for local seed script |
 | `SEED_TEST_PASSWORD` | No | Password for local seed script |
+| `CORS_ORIGINS` | **Yes (prod)** | Comma-separated allowed frontend origins (include Vercel URL) |
 
 ### Frontend (`frontend/.env`)
+
+Copy from [`frontend/.env.example`](frontend/.env.example):
 
 | Variable | Required | Description |
 |----------|----------|-------------|
 | `VITE_API_BASE_URL` | No | Backend API URL (default: `http://127.0.0.1:8000`) |
+
+---
+
+## Deployment
+
+### Frontend (Vercel)
+
+1. Import the GitHub repo and set **Root Directory** to `frontend`.
+2. Framework preset: **Vite** — Build Command: `npm run build`, Output Directory: `dist`.
+3. Add environment variable:
+   ```env
+   VITE_API_BASE_URL=https://crypto-ai-dashboard-1f6g.onrender.com
+   ```
+4. Deploy. [`frontend/vercel.json`](frontend/vercel.json) handles SPA routing for React Router.
+
+### Backend (Render)
+
+The API runs on Render. Ensure these environment variables are set:
+
+- `MONGODB_URI`, `JWT_SECRET_KEY` (required)
+- `CORS_ORIGINS` — must include your Vercel URL, for example:
+  ```env
+  CORS_ORIGINS=http://localhost:5173,http://127.0.0.1:5173,https://YOUR-APP.vercel.app
+  ```
+- Optional: `OPENROUTER_API_KEY`, `CCDATA_API_KEY`
+
+After updating `CORS_ORIGINS`, redeploy the backend service.
 
 ---
 

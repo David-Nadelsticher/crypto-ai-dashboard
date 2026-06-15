@@ -1,8 +1,12 @@
+import certifi
 from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorCollection
 
 from app.core.config import settings
 
-client = AsyncIOMotorClient(settings.MONGODB_URI)
+client = AsyncIOMotorClient(
+    settings.MONGODB_URI,
+    tlsCAFile=certifi.where(),
+)
 db = client[settings.MONGODB_DB_NAME]
 users_collection: AsyncIOMotorCollection = db["users"]
 votes_collection: AsyncIOMotorCollection = db["votes"]
